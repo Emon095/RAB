@@ -1,15 +1,24 @@
 ---
 title: About Us
 subtitle: Decrypting the Essence of Rea11y Annoying Bots
+images:
+  - "![[attachments/553757609_122129216936941325_577328027135983841_n 2.jpg]]"
+  - "![[attachments/DSC07255~2 (1).jpg]]"
 ---
 
-RAB (Rea11y Annoying Bots) is an elite cybersecurity collective established in 2026. We are a group of specialized security researchers, white-hat hackers, and digital architects dedicated to pushing the boundaries of cyber defense and offensive security.
+Founded in August 2024 by **SM Shahrier Emon**, Really Annoying Bots (RAB) began as a small idea among curious minds who loved breaking systems to understand them. What started as casual experiments in automation and security has evolved into a bold, dedicated team driven by curiosity and creativity.
+
+RAB isn't just a name—it's an attitude. We challenge norms, push limits, and stay "annoyingly" persistent until we uncover the flaw or the smarter way forward. Our team blends coders, pentesters, and creative problem solvers, united by collaboration and a passion for redefining cybersecurity.
+
+We're not here to blend in. We're here to disrupt, innovate, and leave the digital world sharper, smarter, and more secure.
 
 ### Our Mission
-To secure the digital frontier through innovative research, rigorous testing, and proactive threat intelligence. We believe in a world where security is not just a feature, but a fundamental pillar of digital existence.
+At Really Annoying Bots, our mission is to revolutionize cybersecurity through innovative solutions and relentless dedication. We believe in pushing boundaries and challenging the status quo to create a more secure digital future.
 
-### What We Do
-From participating in prestigious global Capture The Flag (CTF) competitions to providing high-end security audits, our team operates at the intersection of intelligence and execution.
+Our commitment extends beyond just technical excellence. We aim to empower organizations and individuals with cutting-edge security tools and knowledge, fostering a community of security-conscious innovators.
+
+Through continuous research, development, and collaboration, we strive to stay ahead of emerging threats while building solutions that are both powerful and accessible.
+
 
 *   **Security Research:** Exploring zero-day vulnerabilities and advanced persistent threats.
 *   **CTF Excellence:** Dominating the global leaderboard with precision and speed.

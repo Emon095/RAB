@@ -24,6 +24,7 @@ This is a Vite + React + TypeScript site for the Rea11y Annoying Bots (RAB) cybe
 - `src/components/CyberEffects.tsx`: animated visual effects used by the app shell.
 - `src/lib/utils.ts`: `cn()` helper built from `clsx` and `tailwind-merge`.
 - `src/content/**/*.md`: content collections loaded with `import.meta.glob` and parsed by `gray-matter`.
+- `src/content/attachments/`: Obsidian paste target for local images used by markdown/front matter.
 - `server.ts`: Express wrapper around Vite plus the CTFtime API proxy.
 
 ## Content Conventions
@@ -34,7 +35,11 @@ Content is markdown with YAML front matter. Keep field names consistent with the
 - `src/content/achievements/*.md`: `name`, `rank`, `year`, `category`, `points`, `globalRank`, `issuedBy`
 - `src/content/team/*.md`: `name`, `fullname`, `role`, `category`, `username`, `image`, optional `github`, `linkedin`
 - `src/content/projects/*.md`: `title`, `subtitle`, `description`, `heroImage`, `category`, `date`, `status`, `tags`
-- `src/content/gallery/*.md`: `event`, `date`, `description`, comma-separated `images`
+- `src/content/gallery/*.md`: `event`, `date`, `description`, `images` as a YAML list or comma-separated string
+
+Local image fields can use full URLs, paths under `src/content`, plain filenames in `attachments`, or Obsidian embeds such as `![[attachments/example.png]]`. Markdown bodies can also use Obsidian image embeds, including aliases like `![[attachments/example.png|Alt text]]`.
+
+Content collection filenames are numbered per folder, for example `001-example.md`, `002-example.md`. Keep the three-digit prefix when adding or reordering files; the app sorts collections by filename.
 
 Routes for project and gallery detail pages are generated from the lowercased title/event with spaces replaced by hyphens.
 
@@ -42,6 +47,8 @@ Routes for project and gallery detail pages are generated from the lowercased ti
 
 - Follow the existing visual language: cyber red accent, Orbitron headings, skewed panel layers, `glass-morphism`, and motion animations.
 - Prefer adding/updating markdown content before hard-coding new content in `App.tsx`.
+- When editing content in Obsidian, open `src/content` as the vault. Pasted images should land in `src/content/attachments`.
+- In Obsidian, use the numeric filename prefixes to keep each folder ordered from first to last.
 - Use `lucide-react` icons already imported in `App.tsx` when adding controls or service icons.
 - Keep theme colors routed through CSS variables in `src/index.css` where practical.
 - The CTFtime team ID is extracted from `src/content/hero.md`; changes to that link affect the home page stats card.

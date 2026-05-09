@@ -51,6 +51,7 @@ import {
 import matter from 'gray-matter';
 import ReactMarkdown from 'react-markdown';
 import { cn } from './lib/utils';
+import { parseContentImageList, renderObsidianEmbeds, resolveContentAsset } from './lib/contentAssets';
 import { useTheme } from './context/ThemeContext.tsx';
 import { GlitchText, CircuitLines, GlitchOverlay, DigitalMapBackground } from './components/CyberEffects';
 
@@ -59,9 +60,9 @@ import heroContent from './content/hero.md?raw';
 import aboutContent from './content/about.md?raw';
 
 const loadCollection = (glob: Record<string, any>) => {
-  return Object.values(glob).map(content => {
+  return Object.entries(glob).sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true })).map(([path, content], index) => {
     const { data, content: text } = matter(content);
-    return { ...data, content: text };
+    return { ...data, order: data.order ?? index + 1, sourcePath: path, content: text };
   });
 };
 
@@ -241,6 +242,43 @@ const SectionHeader = ({ title, subtitle }: { title: string, subtitle?: string }
   </div>
 );
 
+const MarkdownContent = ({ content }: { content: string }) => (
+  <ReactMarkdown
+    components={{
+      img: ({ node: _node, ...props }) => (
+        <img
+          {...props}
+          className="my-6 rounded-lg border border-cyber-border shadow-xl"
+          loading="lazy"
+        />
+      )
+    }}
+  >
+    {renderObsidianEmbeds(content)}
+  </ReactMarkdown>
+);
+
+const splitAboutContent = (content: string) => {
+  const missionHeading = content.match(/^###\s+Our Mission\s*$/mi);
+  if (!missionHeading || missionHeading.index === undefined) {
+    return { intro: content, mission: '', remainder: '' };
+  }
+
+  const intro = content.slice(0, missionHeading.index).trim();
+  const afterMissionHeading = content.slice(missionHeading.index + missionHeading[0].length).trim();
+  const nextHeading = afterMissionHeading.search(/^###\s+/mi);
+
+  if (nextHeading === -1) {
+    return { intro, mission: afterMissionHeading, remainder: '' };
+  }
+
+  return {
+    intro,
+    mission: afterMissionHeading.slice(0, nextHeading).trim(),
+    remainder: afterMissionHeading.slice(nextHeading).trim(),
+  };
+};
+
 const TEAM_LOGO_URL = "https://i.postimg.cc/HnsyRTB5/Picsart-25-07-29-01-21-44-004.png";
 const CTFTIME_LOGO_URL = "https://i.postimg.cc/8k69zWBT/download.png";
 
@@ -326,7 +364,7 @@ const HomePage = ({ heroData }: { heroData: any }) => {
           </motion.p>
           
           <motion.div className="text-[var(--text-muted)] max-w-2xl mx-auto text-base leading-relaxed prose prose-invert">
-            <ReactMarkdown>{heroData.content}</ReactMarkdown>
+            <MarkdownContent content={heroData.content} />
           </motion.div>
     
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
@@ -519,8 +557,12 @@ const AchievementsPage = ({ achievements }: { achievements: any[] }) => {
   );
 };
 
-const AboutPage = () => {
+const AboutPage = ({ aboutData }: { aboutData: any }) => {
   const navigate = useNavigate();
+  const aboutSections = splitAboutContent(aboutData.content);
+  const aboutImages = parseContentImageList(aboutData.data.images || aboutData.data.aboutImages);
+  const introImage = aboutImages[0] || "https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=1000";
+  const missionImage = aboutImages[1] || aboutImages[0] || "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1000";
   
   const values = [
     { 
@@ -586,12 +628,11 @@ const AboutPage = () => {
             className="space-y-4"
           >
             <h1 className="text-5xl md:text-7xl font-orbitron font-black text-white tracking-widest uppercase">
-              About Us
+              {aboutData.data.title || 'About Us'}
             </h1>
             <div className="w-16 h-1 bg-cyber-red mx-auto" />
             <p className="text-gray-400 text-lg md:text-xl leading-relaxed max-w-4xl mx-auto">
-              We combine CTF experience with offensive security research and vulnerability
-              disclosure to uncover flaws, build tools, and strengthen cybersecurity.
+              {aboutData.data.subtitle || 'We combine CTF experience with offensive security research and vulnerability disclosure to uncover flaws, build tools, and strengthen cybersecurity.'}
             </p>
           </motion.div>
 
@@ -608,35 +649,16 @@ const AboutPage = () => {
       </div>
 
       <div className="w-full space-y-32">
-        {/* Our Story Section */}
+        {/* Markdown Content Section */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
             <div className="inline-block">
-              <h2 className="text-3xl font-orbitron font-bold text-white uppercase tracking-wider">Our Story</h2>
+              <h2 className="text-3xl font-orbitron font-bold text-white uppercase tracking-wider">{aboutData.data.title || 'About Us'}</h2>
               <div className="w-12 h-1 bg-cyber-red mt-2" />
             </div>
             
-            <div className="space-y-6 text-gray-400 leading-relaxed text-sm md:text-base">
-              <p>
-                RAB began as a small group of cybersecurity enthusiasts driven by curiosity 
-                and a shared passion for offensive security. Founded with a vision to challenge 
-                digital boundaries, the team started its journey in 2025, initially competing in 
-                Capture The Flag (CTF) events and quickly gaining recognition for its sharp technical 
-                skills and synergy.
-              </p>
-              <p>
-                What started as a competitive team has grown into a collective of researchers, 
-                programmers, and security experts who are deeply committed to understanding 
-                and securing the digital world. We come from diverse technical backgrounds, 
-                but we share the same mindset: always question, always explore, always improve.
-              </p>
-              <p>
-                At our core, we are problem solvers. We thrive in high-pressure scenarios, 
-                whether during timed CTF competitions or real-world adversary simulations. 
-                Every member brings unique strengths to the table, and collaboration is our 
-                greatest tool. We invest heavily in knowledge sharing and constant upskilling 
-                to uplift the community around us.
-              </p>
+            <div className="prose prose-invert max-w-none prose-sm text-gray-400 leading-relaxed">
+              <MarkdownContent content={aboutSections.intro} />
             </div>
           </div>
           
@@ -644,7 +666,7 @@ const AboutPage = () => {
             <div className="absolute inset-0 bg-cyber-red -rotate-1 skew-x-3 group-hover:rotate-0 group-hover:skew-x-0 transition-all duration-500" />
             <div className="relative aspect-[4/3] overflow-hidden shadow-2xl border-2 border-white/10 group-hover:border-cyber-red/50 transition-all duration-500">
               <img 
-                src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=1000" 
+                src={introImage} 
                 alt="Our Team" 
                 className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" 
               />
@@ -653,30 +675,40 @@ const AboutPage = () => {
           </div>
         </section>
 
-        {/* Our Mission Section */}
-        <section className="space-y-8 max-w-4xl">
-          <div className="inline-block">
-            <h2 className="text-3xl font-orbitron font-bold text-white uppercase tracking-wider">Our Mission</h2>
-            <div className="w-12 h-1 bg-cyber-red mt-2" />
-          </div>
-          
-          <div className="space-y-6 text-gray-400 leading-relaxed text-sm md:text-base">
-            <p>
-              At Rea11y Annoying Bots, our mission is to uncover hidden security threats, 
-              understand the mindset of real-world adversaries, and contribute to a safer 
-              digital environment through offensive security practices. We aim to bridge 
-              the gap between theory and application by engaging in Capture The Flag (CTF) 
-              competitions, vulnerability research, and tool development.
-            </p>
-            <p>
-              We believe that hands-on exploration, responsible disclosure, and knowledge sharing 
-              are essential to strengthening cybersecurity. Our work is driven by curiosity, 
-              technical precision, and a commitment to continuous learning. Through collaboration 
-              and innovation, we strive to support the global security community and inspire 
-              the next generation of cybersecurity professionals.
-            </p>
-          </div>
-        </section>
+        {aboutSections.mission && (
+          <section className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="relative group order-2 lg:order-1">
+              <div className="absolute inset-0 bg-cyber-red rotate-1 skew-x-[-3deg] group-hover:rotate-0 group-hover:skew-x-0 transition-all duration-500" />
+              <div className="relative aspect-[4/3] overflow-hidden shadow-2xl border-2 border-white/10 group-hover:border-cyber-red/50 transition-all duration-500">
+                <img 
+                  src={missionImage} 
+                  alt="Our Mission" 
+                  className="w-full h-full object-cover opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60" />
+              </div>
+            </div>
+
+            <div className="space-y-8 order-1 lg:order-2">
+              <div className="inline-block">
+                <h2 className="text-3xl font-orbitron font-bold text-white uppercase tracking-wider">Our Mission</h2>
+                <div className="w-12 h-1 bg-cyber-red mt-2" />
+              </div>
+              
+              <div className="prose prose-invert max-w-none prose-sm text-gray-400 leading-relaxed">
+                <MarkdownContent content={aboutSections.mission} />
+              </div>
+            </div>
+          </section>
+        )}
+
+        {aboutSections.remainder && (
+          <section className="space-y-8 max-w-4xl">
+            <div className="prose prose-invert max-w-none prose-sm text-gray-400 leading-relaxed">
+              <MarkdownContent content={aboutSections.remainder} />
+            </div>
+          </section>
+        )}
 
         {/* Values Grid */}
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 py-12">
@@ -758,7 +790,7 @@ const ProjectsPage = ({ projects }: { projects: any[] }) => (
             <Link to={`/projects/${projectId}`} className="relative z-20 block overflow-hidden rounded-lg m-1 border border-cyber-border hover:border-cyber-red/50 transition-all">
               <div className="aspect-[16/9] overflow-hidden relative">
                 <img 
-                  src={project.heroImage} 
+                  src={resolveContentAsset(project.heroImage)} 
                   alt={project.title} 
                   className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 grayscale group-hover:grayscale-0"
                 />
@@ -814,7 +846,7 @@ const ProjectDetailPage = ({ projects }: { projects: any[] }) => {
         </button>
         
         <div className="relative aspect-[21/9] rounded-2xl overflow-hidden border border-cyber-border bg-cyber-card mb-12 glass-morphism">
-          <img src={project.heroImage} alt={project.title} className="w-full h-full object-cover opacity-70" />
+          <img src={resolveContentAsset(project.heroImage)} alt={project.title} className="w-full h-full object-cover opacity-70" />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
           <div className="absolute bottom-12 left-12 right-12">
             <div className="flex items-center gap-3 mb-4">
@@ -837,7 +869,7 @@ const ProjectDetailPage = ({ projects }: { projects: any[] }) => {
             <div className="bg-cyber-card border border-cyber-border rounded-2xl p-8 glass-morphism">
               <h2 className="text-2xl font-orbitron font-bold text-white mb-8 border-b border-white/5 pb-4">Operational_Summary</h2>
               <div className="prose prose-invert max-w-none prose-sm text-gray-300 leading-relaxed">
-                <ReactMarkdown>{project.content}</ReactMarkdown>
+                <MarkdownContent content={project.content} />
               </div>
             </div>
           </div>
@@ -925,25 +957,39 @@ const TeamPage = ({ team }: { team: any[] }) => {
                             <p className="text-cyber-red text-[8px] font-mono font-black uppercase tracking-tighter">
                               {member.username}
                             </p>
-                            <div className="flex gap-2">
-                              {member.github && (
-                                <a href={member.github} target="_blank" rel="noreferrer" className="text-gray-500 hover:text-white transition-colors">
-                                  <Github size={12} />
-                                </a>
-                              )}
-                              {member.linkedin && (
-                                <a href={member.linkedin} target="_blank" rel="noreferrer" className="text-gray-500 hover:text-white transition-colors">
-                                  <Linkedin size={12} />
-                                </a>
-                              )}
-                            </div>
                           </div>
                         </div>
                         
-                        <div className="mt-2 pt-2 border-t border-white/5">
+                        <div className="mt-2 pt-2 border-t border-white/5 flex items-center justify-between gap-3">
                           <p className="text-gray-400 text-[10px] font-mono font-bold uppercase tracking-widest">
                             {member.role}
                           </p>
+                          <div className="flex shrink-0 gap-2">
+                            {member.github && (
+                              <a
+                                href={member.github}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-gray-500 hover:text-white transition-colors"
+                                aria-label={`${member.fullname} GitHub`}
+                                title="GitHub"
+                              >
+                                <Github size={14} />
+                              </a>
+                            )}
+                            {member.linkedin && (
+                              <a
+                                href={member.linkedin}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-gray-500 hover:text-white transition-colors"
+                                aria-label={`${member.fullname} LinkedIn`}
+                                title="LinkedIn"
+                              >
+                                <Linkedin size={14} />
+                              </a>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -953,9 +999,9 @@ const TeamPage = ({ team }: { team: any[] }) => {
                       <div className="absolute inset-0 bg-cyber-red border border-cyber-red/50 skew-x-[-6deg] translate-x-1 translate-y-1 z-0 group-hover:shadow-[0_0_20px_rgba(239,68,68,0.3)] transition-all" />
                       <div className="absolute inset-0 bg-[#111] border border-white/20 skew-x-[-6deg] z-10 overflow-hidden group-hover:border-white transition-colors">
                         <img 
-                          src={member.image} 
+                          src={resolveContentAsset(member.image)} 
                           alt={member.fullname} 
-                          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-125"
+                          className="w-full h-full object-cover transition-all duration-700 scale-110 group-hover:scale-125"
                         />
                       </div>
                     </div>
@@ -984,8 +1030,8 @@ const GalleryPage = ({ photos }: { photos: any[] }) => (
     />
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-8">
       {photos.map((item, idx) => {
-        const imageList = item.images ? item.images.split(',') : [];
-        const coverImage = imageList[0]?.trim();
+        const imageList = parseContentImageList(item.images);
+        const coverImage = imageList[0];
         const eventId = encodeURIComponent(item.event.toLowerCase().replace(/\s+/g, '-'));
 
         return (
@@ -1003,7 +1049,7 @@ const GalleryPage = ({ photos }: { photos: any[] }) => (
               <img 
                 src={coverImage} 
                 alt={item.event} 
-                className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700 grayscale group-hover:grayscale-0"
+                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
               <div className="absolute bottom-6 left-6 right-6">
@@ -1044,7 +1090,7 @@ const GalleryDetailPage = ({ photos }: { photos: any[] }) => {
 
   if (!event) return <div className="text-white p-24 text-center font-orbitron">RECORD_NOT_FOUND</div>;
 
-  const imageList = event.images ? event.images.split(',') : [];
+  const imageList = parseContentImageList(event.images);
 
   return (
     <PageWrapper>
@@ -1067,21 +1113,21 @@ const GalleryDetailPage = ({ photos }: { photos: any[] }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
         {imageList.map((imgUrl: string, idx: number) => (
           <motion.div
             key={idx}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
-            className="relative group aspect-square overflow-hidden rounded-2xl border border-cyber-border hover:border-cyber-red/30 transition-all shadow-xl glass-morphism"
+            className="relative group min-h-[260px] sm:min-h-[340px] overflow-hidden rounded-2xl border border-cyber-border hover:border-cyber-red/30 transition-all shadow-xl glass-morphism bg-black/40"
           >
             <img 
-              src={imgUrl.trim()} 
+              src={imgUrl} 
               alt={`${event.event} - ${idx}`}
-              className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-700 grayscale hover:grayscale-0 group-hover:scale-105"
+              className="w-full h-full max-h-[78vh] object-contain opacity-100 transition-all duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
             <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
               <div className="bg-black/80 backdrop-blur-md p-2 rounded border border-white/10 text-[10px] font-mono text-white">
                 IMG_{String(idx + 1).padStart(2, '0')}
@@ -1157,7 +1203,7 @@ export default function App() {
         <main className="relative z-10 overflow-hidden">
           <Routes>
             <Route path="/" element={<HomePage heroData={heroData} />} />
-            <Route path="/about" element={<AboutPage />} />
+            <Route path="/about" element={<AboutPage aboutData={aboutData} />} />
             <Route path="/achievements" element={<AchievementsPage achievements={achievements} />} />
             <Route path="/gallery" element={<GalleryPage photos={photos} />} />
             <Route path="/gallery/:eventId" element={<GalleryDetailPage photos={photos} />} />

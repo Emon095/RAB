@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "4a06dfb5f7d24a87",
+        "id": "6c96ede5d81aa69e",
         "type": "tabs",
         "children": [
           {
-            "id": "8b23fe328f500c9c",
+            "id": "223cccf8a32f68be",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "achievements/axiom_2026.md",
+                "file": "about.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "axiom_2026"
+              "title": "about"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "achievements/axiom_2026.md",
+                "file": "about.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for axiom_2026"
+              "title": "Backlinks for about"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "achievements/axiom_2026.md",
+                "file": "about.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from axiom_2026"
+              "title": "Outgoing links from about"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "achievements/axiom_2026.md",
+                "file": "about.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of axiom_2026"
+              "title": "Outline of about"
             }
           }
         ]
@@ -180,9 +180,48 @@
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
       "command-palette:Open command palette": false,
-      "bases:Create new base": false
+      "bases:Create new base": false,
+      "obsidian-git:Open Git source control": false
     }
   },
-  "active": "8b23fe328f500c9c",
-  "lastOpenFiles": []
+  "active": "223cccf8a32f68be",
+  "lastOpenFiles": [
+    "attachments/553757609_122129216936941325_577328027135983841_n 2.jpg",
+    "gallery/005-Bughunt 2026.md",
+    "attachments/614097268_122151795170941325_1331110651755856352_n.jpg",
+    "attachments/614386536_122151795158941325_4006422571296522236_n.jpg",
+    "attachments/615068079_122151795116941325_8270325475319528075_n.jpg",
+    "attachments/612847206_122151795020941325_2438399143197426776_n.jpg",
+    "gallery/004-Televerse 1.0.md",
+    "attachments/589370158_122142807872941325_2711716508941199326_n.jpg",
+    "attachments/589422920_122142807818941325_7230858972302899750_n 1.jpg",
+    "attachments/589434555_122142807770941325_6167326664682971168_n.jpg",
+    "attachments/589612626_122142807716941325_5670878573707038934_n 1.jpg",
+    "attachments/589422920_122142807818941325_7230858972302899750_n.jpg",
+    "attachments/589612626_122142807716941325_5670878573707038934_n.jpg",
+    "gallery/003-Circuit Clash 1.0!.md",
+    "gallery/001-BUP CTF.md",
+    "gallery/002-DIU CyberCon.md",
+    "about.md",
+    "Untitled 1.md",
+    "Untitled.md",
+    "team/014-Mehedi Hasan Foysal.md",
+    "team/015-Imamul Huda.md",
+    "team/013-Zarin Tabassum Apsara.md",
+    "team/012-Md. Muhid Khan.md",
+    "team/011-Abdullah.md",
+    "team/010-null_pointer.md",
+    "team/009-Md. Rohan.md",
+    "team/008-RADOAN MOKTAKEN JAMAN.md",
+    "team/007-Tarana Tabassum Khan.md",
+    "team/006-Abdus Salam Gifari.md",
+    "team/005-Taqi Tahmid.md",
+    "team/004-Abid Hasan Ziden.md",
+    "team/003-Tasdik Muttaki.md",
+    "team/002-Shahed Shahrier.md",
+    "team/001-Emon.md",
+    "team/Emon.md",
+    "services/004-guidance.md",
+    "attachments"
+  ]
 }
