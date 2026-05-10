@@ -158,7 +158,7 @@ const Navbar = () => {
       <div className="w-full flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
           <img src={TEAM_LOGO_URL} alt="RAB" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform" />
-          <span className="font-orbitron font-bold text-white tracking-tighter text-xl">RAB</span>
+          <span className="font-orbitron font-bold text-[var(--text-main)] tracking-tighter text-xl">RAB</span>
         </Link>
         
         <div className="flex items-center">
@@ -191,7 +191,7 @@ const Navbar = () => {
 
         <div className="md:hidden flex items-center gap-4">
           <ThemeToggle />
-          <button onClick={() => setIsOpen(!isOpen)} className="text-gray-400 hover:text-cyber-red transition-colors">
+          <button onClick={() => setIsOpen(!isOpen)} className="text-[var(--text-muted)] hover:text-cyber-red transition-colors">
             {isOpen ? <X /> : <Menu />}
           </button>
         </div>
@@ -214,7 +214,7 @@ const Navbar = () => {
                   onClick={() => setIsOpen(false)}
                   className={cn(
                     "text-xs font-orbitron tracking-widest uppercase",
-                    location.pathname === item.path ? "text-cyber-red" : "text-gray-400"
+                    location.pathname === item.path ? "text-cyber-red" : "text-[var(--text-muted)]"
                   )}
                 >
                   {item.name}
@@ -386,7 +386,7 @@ const HomePage = ({ heroData }: { heroData: any }) => {
                     <span className="bg-cyber-red text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider w-fit">
                       {loading ? '...' : `#${teamStats?.countryRank || '---'} IN ${teamStats?.country || 'UNSET'}`}
                     </span>
-                    <p className="text-white font-orbitron text-xs font-bold tracking-[0.2em]">
+                    <p className="text-[var(--text-main)] font-orbitron text-xs font-bold tracking-[0.2em]">
                       {loading ? 'LOADING INTEL...' : `${teamStats?.countryName || 'UNSET'} SECTOR`}
                     </p>
                   </div>
@@ -405,8 +405,8 @@ const HomePage = ({ heroData }: { heroData: any }) => {
                     <div key={stat.label} className="flex items-center text-sm border-b border-white/5 pb-3 last:border-0 last:pb-0">
                       <span className="w-8 text-lg grayscale opacity-70">{stat.icon}</span>
                       <div className="flex-1">
-                        <p className="uppercase text-[8px] text-gray-500 font-bold tracking-wider">{stat.label}</p>
-                        <p className="text-white font-bold text-base">{stat.value}</p>
+                        <p className="uppercase text-[8px] text-[var(--text-muted)] font-bold tracking-wider">{stat.label}</p>
+                        <p className="text-[var(--text-main)] font-bold text-base">{stat.value}</p>
                       </div>
                     </div>
                   ))}
@@ -420,8 +420,8 @@ const HomePage = ({ heroData }: { heroData: any }) => {
                 <div className="absolute inset-0 bg-cyber-card border border-cyber-border skew-x-[-4deg] group-hover:border-cyber-red/40 transition-all z-10 shadow-xl glass-morphism" />
                 <div className="relative z-20 p-6 flex items-center justify-center h-full text-center">
                   <div>
-                    <h3 className="text-white font-orbitron font-bold text-lg mb-1 group-hover:text-cyber-red transition-colors">ABOUT_US</h3>
-                    <p className="text-gray-500 text-[10px] uppercase font-mono tracking-widest">Decript mission & core values</p>
+                    <h3 className="text-[var(--text-main)] font-orbitron font-bold text-lg mb-1 group-hover:text-cyber-red transition-colors">ABOUT_US</h3>
+                    <p className="text-[var(--text-muted)] text-[10px] uppercase font-mono tracking-widest">Decript mission & core values</p>
                   </div>
                   <ChevronRight className="absolute right-6 text-cyber-red opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-1" />
                 </div>
@@ -432,8 +432,8 @@ const HomePage = ({ heroData }: { heroData: any }) => {
                 <div className="absolute inset-0 bg-cyber-card border border-cyber-border skew-x-[-4deg] group-hover:border-cyber-red/40 transition-all z-10 shadow-xl glass-morphism" />
                 <div className="relative z-20 p-6 flex items-center justify-center h-full text-center">
                   <div>
-                    <h3 className="text-white font-orbitron font-bold text-lg mb-1 group-hover:text-cyber-red transition-colors">ACHIEVEMENTS</h3>
-                    <p className="text-gray-500 text-[10px] uppercase font-mono tracking-widest">Access victory records</p>
+                    <h3 className="text-[var(--text-main)] font-orbitron font-bold text-lg mb-1 group-hover:text-cyber-red transition-colors">ACHIEVEMENTS</h3>
+                    <p className="text-[var(--text-muted)] text-[10px] uppercase font-mono tracking-widest">Access victory records</p>
                   </div>
                   <ChevronRight className="absolute right-6 text-cyber-red opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-1" />
                 </div>
@@ -635,11 +635,11 @@ const AboutPage = ({ aboutData }: { aboutData: any }) => {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-4"
           >
-            <h1 className="text-5xl md:text-7xl font-orbitron font-black text-white tracking-widest uppercase">
+            <h1 className="text-5xl md:text-7xl font-orbitron font-black text-[var(--text-main)] tracking-widest uppercase">
               {aboutData.data.title || 'About Us'}
             </h1>
             <div className="w-16 h-1 bg-cyber-red mx-auto" />
-            <p className="text-gray-400 text-lg md:text-xl leading-relaxed max-w-4xl mx-auto">
+            <p className="text-[var(--text-muted)] text-lg md:text-xl leading-relaxed max-w-4xl mx-auto">
               {aboutData.data.subtitle || 'We combine CTF experience with offensive security research and vulnerability disclosure to uncover flaws, build tools, and strengthen cybersecurity.'}
             </p>
           </motion.div>
@@ -661,11 +661,11 @@ const AboutPage = ({ aboutData }: { aboutData: any }) => {
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
             <div className="inline-block">
-              <h2 className="text-3xl font-orbitron font-bold text-white uppercase tracking-wider">{aboutData.data.title || 'About Us'}</h2>
+              <h2 className="text-3xl font-orbitron font-bold text-[var(--text-main)] uppercase tracking-wider">{aboutData.data.title || 'About Us'}</h2>
               <div className="w-12 h-1 bg-cyber-red mt-2" />
             </div>
             
-            <div className="prose prose-invert max-w-none prose-sm text-gray-400 leading-relaxed">
+            <div className="prose prose-invert max-w-none prose-sm text-[var(--text-muted)] leading-relaxed">
               <MarkdownContent content={aboutSections.intro} />
             </div>
           </div>
@@ -699,11 +699,11 @@ const AboutPage = ({ aboutData }: { aboutData: any }) => {
 
             <div className="space-y-8 order-1 lg:order-2">
               <div className="inline-block">
-                <h2 className="text-3xl font-orbitron font-bold text-white uppercase tracking-wider">Our Mission</h2>
+                <h2 className="text-3xl font-orbitron font-bold text-[var(--text-main)] uppercase tracking-wider">Our Mission</h2>
                 <div className="w-12 h-1 bg-cyber-red mt-2" />
               </div>
               
-              <div className="prose prose-invert max-w-none prose-sm text-gray-400 leading-relaxed">
+              <div className="prose prose-invert max-w-none prose-sm text-[var(--text-muted)] leading-relaxed">
                 <MarkdownContent content={aboutSections.mission} />
               </div>
             </div>
@@ -712,7 +712,7 @@ const AboutPage = ({ aboutData }: { aboutData: any }) => {
 
         {aboutSections.remainder && (
           <section className="space-y-8 max-w-4xl">
-            <div className="prose prose-invert max-w-none prose-sm text-gray-400 leading-relaxed">
+            <div className="prose prose-invert max-w-none prose-sm text-[var(--text-muted)] leading-relaxed">
               <MarkdownContent content={aboutSections.remainder} />
             </div>
           </section>
@@ -733,11 +733,11 @@ const AboutPage = ({ aboutData }: { aboutData: any }) => {
                 <div className="p-2 bg-cyber-red/10 rounded-lg group-hover:bg-cyber-red/20 transition-colors">
                   {value.icon}
                 </div>
-                <h3 className="text-lg font-orbitron font-bold text-white group-hover:text-cyber-red transition-colors">
+                <h3 className="text-lg font-orbitron font-bold text-[var(--text-main)] group-hover:text-cyber-red transition-colors">
                   {value.title}
                 </h3>
               </div>
-              <p className="text-sm text-gray-400 leading-relaxed pl-13">
+              <p className="text-sm text-[var(--text-muted)] leading-relaxed pl-13">
                 {value.desc}
               </p>
             </motion.div>
@@ -769,8 +769,8 @@ const ServicesPage = ({ services }: { services: any[] }) => (
             <div className="text-cyber-red mb-4 p-3 bg-cyber-red/5 rounded-full group-hover:scale-110 group-hover:bg-cyber-red/10 transition-all">
               {IconMap[service.icon as string]}
             </div>
-            <h3 className="text-white font-bold text-xl mb-3 font-orbitron tracking-tight group-hover:text-cyber-red transition-colors">{service.title}</h3>
-            <p className="text-gray-400 text-sm leading-relaxed">{service.description}</p>
+            <h3 className="text-[var(--text-main)] font-bold text-xl mb-3 font-orbitron tracking-tight group-hover:text-cyber-red transition-colors">{service.title}</h3>
+            <p className="text-[var(--text-muted)] text-sm leading-relaxed">{service.description}</p>
           </div>
         </motion.div>
       ))}
@@ -810,15 +810,15 @@ const ProjectsPage = ({ projects }: { projects: any[] }) => (
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-[10px] font-mono text-cyber-red uppercase tracking-widest">{project.category}</span>
-                  <span className="text-[10px] text-gray-500">•</span>
-                  <span className="text-[10px] font-mono text-gray-500">{project.date}</span>
+                  <span className="text-[10px] text-[var(--text-muted)]">•</span>
+                  <span className="text-[10px] font-mono text-[var(--text-muted)]">{project.date}</span>
                 </div>
-                <h3 className="text-white font-orbitron font-bold text-xl mb-2 group-hover:text-cyber-red transition-colors">{project.title}</h3>
-                <p className="text-gray-400 text-xs line-clamp-2 leading-relaxed">{project.description}</p>
+                <h3 className="text-[var(--text-main)] font-orbitron font-bold text-xl mb-2 group-hover:text-cyber-red transition-colors">{project.title}</h3>
+                <p className="text-[var(--text-muted)] text-xs line-clamp-2 leading-relaxed">{project.description}</p>
                 
                 <div className="mt-4 flex flex-wrap gap-2">
                   {project.tags?.map((tag: string) => (
-                    <span key={tag} className="text-[8px] bg-white/5 border border-white/10 text-gray-500 px-2 py-0.5 rounded">
+                    <span key={tag} className="text-[8px] bg-white/5 border border-white/10 text-[var(--text-muted)] px-2 py-0.5 rounded">
                       #{tag.toUpperCase()}
                     </span>
                   ))}
@@ -840,14 +840,14 @@ const ProjectDetailPage = ({ projects }: { projects: any[] }) => {
     p.title && encodeURIComponent(p.title.toLowerCase().replace(/\s+/g, '-')) === projectId
   );
 
-  if (!project) return <div className="text-white p-24 text-center font-orbitron">PROJECT_NOT_FOUND</div>;
+  if (!project) return <div className="text-[var(--text-main)] p-24 text-center font-orbitron">PROJECT_NOT_FOUND</div>;
 
   return (
     <PageWrapper>
       <div className="mb-12">
         <button 
           onClick={() => navigate('/projects')}
-          className="mb-8 flex items-center gap-2 text-[10px] font-orbitron tracking-widest text-gray-500 hover:text-cyber-red transition-colors group"
+          className="mb-8 flex items-center gap-2 text-[10px] font-orbitron tracking-widest text-[var(--text-muted)] hover:text-cyber-red transition-colors group"
         >
           <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
           BACK_TO_PORTFOLIO
@@ -969,7 +969,7 @@ const TeamPage = ({ team }: { team: any[] }) => {
                         </div>
                         
                         <div className="mt-2 pt-2 border-t border-white/5 flex items-center justify-between gap-3">
-                          <p className="text-gray-400 text-[10px] font-mono font-bold uppercase tracking-widest">
+                          <p className="text-[var(--text-muted)] text-[10px] font-mono font-bold uppercase tracking-widest">
                             {member.role}
                           </p>
                           <div className="flex shrink-0 gap-2">
@@ -978,7 +978,7 @@ const TeamPage = ({ team }: { team: any[] }) => {
                                 href={member.github}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="text-gray-500 hover:text-white transition-colors"
+                                className="text-[var(--text-muted)] hover:text-cyber-red transition-colors"
                                 aria-label={`${member.fullname} GitHub`}
                                 title="GitHub"
                               >
@@ -990,7 +990,7 @@ const TeamPage = ({ team }: { team: any[] }) => {
                                 href={member.linkedin}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="text-gray-500 hover:text-white transition-colors"
+                                className="text-[var(--text-muted)] hover:text-cyber-red transition-colors"
                                 aria-label={`${member.fullname} LinkedIn`}
                                 title="LinkedIn"
                               >
@@ -1096,7 +1096,7 @@ const GalleryDetailPage = ({ photos }: { photos: any[] }) => {
     encodeURIComponent(p.event.toLowerCase().replace(/\s+/g, '-')) === eventId
   );
 
-  if (!event) return <div className="text-white p-24 text-center font-orbitron">RECORD_NOT_FOUND</div>;
+  if (!event) return <div className="text-[var(--text-main)] p-24 text-center font-orbitron">RECORD_NOT_FOUND</div>;
 
   const imageList = parseContentImageList(event.images);
 
@@ -1170,9 +1170,9 @@ const ConnectPage = () => (
           <div className="w-20 h-20 bg-cyber-red/5 text-cyber-red rounded-3xl flex items-center justify-center mb-8 group-hover:bg-cyber-red group-hover:text-white transition-all transform group-hover:rotate-6">
             {social.icon}
           </div>
-          <h4 className="text-white font-orbitron text-lg font-bold uppercase tracking-widest mb-4 group-hover:text-cyber-red transition-colors">{social.label}</h4>
+          <h4 className="text-[var(--text-main)] font-orbitron text-lg font-bold uppercase tracking-widest mb-4 group-hover:text-cyber-red transition-colors">{social.label}</h4>
           <div className="w-8 h-1 bg-cyber-red/20 mb-4 group-hover:w-16 transition-all" />
-          <p className="text-gray-500 text-[10px] uppercase font-mono font-bold tracking-[0.2em]">{social.desc}</p>
+          <p className="text-[var(--text-muted)] text-[10px] uppercase font-mono font-bold tracking-[0.2em]">{social.desc}</p>
         </motion.a>
       ))}
     </div>
@@ -1228,7 +1228,7 @@ export default function App() {
             <div className="flex items-center gap-3">
               <img src={TEAM_LOGO_URL} alt="RAB" className="w-12 h-12 object-contain" />
               <div>
-                <div className="font-orbitron font-bold text-xl text-white">RAB</div>
+                <div className="font-orbitron font-bold text-xl text-[var(--text-main)]">RAB</div>
                 <p className="text-[var(--text-muted)] text-[10px] font-mono tracking-widest uppercase whitespace-nowrap">REA11Y ANNOYING BOTS • ESTABLISHED 2025</p>
               </div>
             </div>
