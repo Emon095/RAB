@@ -53,7 +53,7 @@ import ReactMarkdown from 'react-markdown';
 import { cn } from './lib/utils';
 import { parseContentImageList, renderObsidianEmbeds, resolveContentAsset } from './lib/contentAssets';
 import { useTheme } from './context/ThemeContext.tsx';
-import { GlitchText, CircuitLines, GlitchOverlay, DigitalMapBackground, BinarySkullBackground } from './components/CyberEffects';
+import { GlitchText, CircuitLines, GlitchOverlay, DigitalMapBackground } from './components/CyberEffects';
 
 // Import markdown content as raw strings
 import heroContent from './content/hero.md?raw';
@@ -190,25 +190,41 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={cn(
-      "fixed top-0 left-0 right-0 z-50 py-4 px-6 md:px-12 transition-all duration-300",
-      theme === 'glass' ? "bg-black/20 backdrop-blur-xl border-b border-white/10" : "bg-[var(--bg-title)]/90 backdrop-blur-md border-b border-cyber-red/30"
-    )}>
-      <div className="w-full flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
-          <img src={TEAM_LOGO_URL} alt="RAB" className="w-8 h-8 object-contain group-hover:scale-110 transition-transform" />
-          <span className="font-orbitron font-bold text-[var(--text-main)] tracking-tighter text-xl">RAB</span>
+    <nav className="fixed top-5 left-0 right-0 z-50 px-3 sm:px-6 md:px-10 transition-all duration-300">
+      <div className="relative mx-auto h-[92px] w-full max-w-[1340px]">
+        <div className="absolute left-5 right-2 top-4 h-11 rounded-full border border-cyber-border bg-[var(--bg-title)]/90 shadow-[0_14px_22px_rgba(0,0,0,0.24)] backdrop-blur-xl sm:left-8" />
+        <div className="absolute left-8 right-5 top-5 h-3 rounded-full bg-gradient-to-b from-white/65 to-transparent opacity-70 sm:left-12" />
+        <div className="absolute left-20 right-20 top-[50px] h-4 rounded-full bg-black/20 blur-md" />
+        <div className="absolute right-6 top-[24px] hidden h-4 w-44 rounded-full bg-gradient-to-b from-white/70 via-white/30 to-transparent shadow-inner lg:block" />
+
+        <Link to="/" className="absolute left-24 top-0 z-20 hidden h-[94px] w-[148px] transition-transform hover:-translate-y-0.5 md:block">
+          <div className="absolute left-1/2 top-0 h-14 w-40 -translate-x-1/2 -skew-x-[14deg] border border-cyber-border bg-[var(--bg-card)] shadow-[0_8px_22px_rgba(0,0,0,0.32)]" />
+          <div className="absolute left-1/2 top-1 h-4 w-36 -translate-x-1/2 -skew-x-[14deg] bg-gradient-to-b from-white/55 to-transparent opacity-70" />
+          <div
+            className="absolute left-1/2 top-6 h-[72px] w-[104px] -translate-x-1/2 border border-cyber-border bg-[var(--bg-card)] shadow-[0_12px_24px_rgba(0,0,0,0.35)]"
+            style={{ clipPath: "polygon(50% 100%, 0 0, 100% 0)" }}
+          />
+          <div className="absolute left-1/2 top-[18px] flex -translate-x-1/2 flex-col items-center text-center leading-none">
+            <span className="font-orbitron text-2xl font-black tracking-tight text-[var(--text-main)]">RAB</span>
+            <span className="mt-1 text-[7px] font-black uppercase tracking-[0.14em] text-cyber-red">Cyber Team</span>
+          </div>
+        </Link>
+
+        <Link to="/" className="absolute left-4 top-4 z-20 flex h-11 items-center rounded-full border border-cyber-border bg-[var(--bg-card)] px-5 shadow-[0_8px_18px_rgba(0,0,0,0.22)] md:hidden">
+          <span className="font-orbitron text-lg font-black text-[var(--text-main)]">RAB</span>
         </Link>
         
-        <div className="flex items-center">
-          <div className="hidden md:flex items-center space-x-8 text-[10px] font-orbitron tracking-[0.2em] uppercase mr-8">
+        <div className="absolute inset-x-0 top-4 z-10 flex h-11 items-center justify-end pl-[280px] pr-5">
+          <div className="hidden md:flex items-center gap-1 text-[10px] font-orbitron tracking-[0.16em] uppercase lg:gap-2">
             {navItems.map((item) => (
               <Link 
                 key={item.name} 
                 to={item.path}
                 className={cn(
-                  "transition-colors duration-200",
-                  location.pathname === item.path ? "text-cyber-red" : "text-[var(--text-muted)] hover:text-cyber-red"
+                  "rounded-full px-3 py-2 transition-all duration-200 lg:px-4",
+                  location.pathname === item.path
+                    ? "bg-cyber-red/10 text-cyber-red shadow-inner"
+                    : "text-[var(--text-muted)] hover:bg-cyber-red/5 hover:text-cyber-red"
                 )}
               >
                 {item.name}
@@ -219,7 +235,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center">
             <motion.button 
               onClick={() => window.location.href = 'mailto:smshahrieremon@gmail.com'}
-              className="px-4 py-1.5 border border-cyber-red/50 text-[10px] font-orbitron tracking-widest uppercase text-cyber-red hover:bg-cyber-red hover:text-white transition-all rounded"
+              className="ml-3 rounded-full border border-cyber-red/40 bg-[var(--bg-card)]/50 px-4 py-1.5 text-[10px] font-orbitron uppercase tracking-widest text-cyber-red shadow-inner transition-all hover:bg-cyber-red hover:text-white"
               whileHover={{ boxShadow: "0 0 15px rgba(239, 68, 68, 0.4)" }}
             >
               Contact Us
@@ -228,7 +244,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="md:hidden flex items-center gap-4">
+        <div className="absolute right-5 top-3 z-20 flex items-center gap-4 md:hidden">
           <ThemeToggle />
           <button onClick={() => setIsOpen(!isOpen)} className="text-[var(--text-muted)] hover:text-cyber-red transition-colors">
             {isOpen ? <X /> : <Menu />}
@@ -243,7 +259,7 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-[var(--bg-title)]/95 backdrop-blur-lg border-t border-cyber-red/20 overflow-hidden"
+            className="md:hidden mx-auto mt-2 max-w-[calc(100vw-2rem)] overflow-hidden rounded-lg border border-cyber-red/30 bg-[var(--bg-title)]/95 backdrop-blur-xl shadow-[0_12px_30px_rgba(0,0,0,0.3)]"
           >
             <div className="flex flex-col p-6 space-y-4">
               {navItems.map((item) => (
@@ -253,7 +269,7 @@ const Navbar = () => {
                   onClick={() => setIsOpen(false)}
                   className={cn(
                     "text-xs font-orbitron tracking-widest uppercase",
-                    location.pathname === item.path ? "text-cyber-red" : "text-[var(--text-muted)]"
+                    location.pathname === item.path ? "text-cyber-red" : "text-[var(--text-muted)] hover:text-cyber-red"
                   )}
                 >
                   {item.name}
@@ -268,7 +284,7 @@ const Navbar = () => {
 };
 
 const SectionHeader = ({ title, subtitle }: { title: string, subtitle?: string }) => (
-  <div className="mb-12 text-center md:text-left">
+  <div className="mb-12 text-center">
     <motion.h2 
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -276,8 +292,8 @@ const SectionHeader = ({ title, subtitle }: { title: string, subtitle?: string }
     >
       {title}
     </motion.h2>
-    <div className="w-24 h-1 bg-cyber-red mt-4 mb-6" />
-    {subtitle && <p className="text-[var(--text-muted)] max-w-2xl text-sm leading-relaxed">{subtitle}</p>}
+    <div className="mx-auto mt-4 mb-6 h-1 w-24 bg-cyber-red" />
+    {subtitle && <p className="mx-auto max-w-2xl text-sm leading-relaxed text-[var(--text-muted)]">{subtitle}</p>}
   </div>
 );
 
@@ -1253,7 +1269,6 @@ export default function App() {
       <div className="min-h-screen bg-cyber-dark font-sans selection:bg-cyber-red selection:text-white relative crt">
         <div className="scanline" />
         <GlitchOverlay />
-        <BinarySkullBackground />
         <DigitalMapBackground />
         <CircuitLines />
         <Navbar />
