@@ -73,6 +73,18 @@ const projectsGlob = import.meta.glob('./content/projects/*.md', { eager: true, 
 const galleryGlob = import.meta.glob('./content/gallery/*.md', { eager: true, query: '?raw', import: 'default' });
 const connectGlob = import.meta.glob('./content/connect/*.md', { eager: true, query: '?raw', import: 'default' });
 
+const FacebookIcon = ({ size = 32 }: { size?: number }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M14.5 8.2V6.6c0-.8.2-1.2 1.3-1.2h1.7V2.5h-2.7c-3.2 0-4.4 1.6-4.4 4.3v1.4H8v3.1h2.4v10.2h4.1V11.3h2.8l.4-3.1h-3.2Z" />
+  </svg>
+);
+
 const IconMap: Record<string, React.ReactNode> = {
   Puzzle: <Puzzle size={32} />,
   Users: <Users size={32} />,
@@ -83,6 +95,7 @@ const IconMap: Record<string, React.ReactNode> = {
   Search: <Search size={40} />,
   Cpu: <Cpu size={40} />,
   Linkedin: <Linkedin size={32} />,
+  Facebook: <FacebookIcon size={32} />,
   Instagram: <Instagram size={32} />,
   Disc: <Disc size={32} />,
   Github: <Github size={32} />
