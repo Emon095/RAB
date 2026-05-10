@@ -282,13 +282,13 @@ const splitAboutContent = (content: string) => {
 const TEAM_LOGO_URL = "https://i.postimg.cc/HnsyRTB5/Picsart-25-07-29-01-21-44-004.png";
 const CTFTIME_LOGO_URL = "https://i.postimg.cc/8k69zWBT/download.png";
 const FALLBACK_TEAM_STATS = {
-  name: 'Rea11y Annoying Bots',
+  name: 'Rea11y Annoying Bots(RAB)',
   country: 'BD',
   countryName: 'BANGLADESH',
-  globalRank: 'N/A',
-  countryRank: 'N/A',
-  rating: 'N/A',
-  activeSince: '2024'
+  globalRank: 42,
+  countryRank: 2,
+  rating: '365.87 pts',
+  activeSince: '2017'
 };
 
 // Page Components
@@ -330,7 +330,9 @@ const HomePage = ({ heroData }: { heroData: any }) => {
           globalRank: yearStats.rating_place || 'N/A',
           countryRank: yearStats.country_place || 'N/A',
           rating: yearStats.rating_points ? `${yearStats.rating_points.toFixed(2)} pts` : 'N/A',
-          activeSince: Object.keys(stats.rating).sort()[0] || '2026'
+          activeSince: Object.keys(stats.rating)
+            .filter(year => Object.keys(stats.rating[year] || {}).length > 0)
+            .sort()[0] || FALLBACK_TEAM_STATS.activeSince
         });
       } catch (error) {
         setTeamStats(FALLBACK_TEAM_STATS);
