@@ -32,10 +32,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
       - name: Build
         run: npm run build
-        env:
-          GITHUB_PAGES: "true"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

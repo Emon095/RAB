@@ -281,6 +281,15 @@ const splitAboutContent = (content: string) => {
 
 const TEAM_LOGO_URL = "https://i.postimg.cc/HnsyRTB5/Picsart-25-07-29-01-21-44-004.png";
 const CTFTIME_LOGO_URL = "https://i.postimg.cc/8k69zWBT/download.png";
+const FALLBACK_TEAM_STATS = {
+  name: 'Rea11y Annoying Bots',
+  country: 'BD',
+  countryName: 'BANGLADESH',
+  globalRank: 'N/A',
+  countryRank: 'N/A',
+  rating: 'N/A',
+  activeSince: '2024'
+};
 
 // Page Components
 const HomePage = ({ heroData }: { heroData: any }) => {
@@ -324,8 +333,7 @@ const HomePage = ({ heroData }: { heroData: any }) => {
           activeSince: Object.keys(stats.rating).sort()[0] || '2026'
         });
       } catch (error) {
-        console.error('Error fetching CTFtime stats:', error);
-        // Fallback or silent error
+        setTeamStats(FALLBACK_TEAM_STATS);
       } finally {
         setLoading(false);
       }
