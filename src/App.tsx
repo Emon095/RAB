@@ -71,6 +71,7 @@ const achievementsGlob = import.meta.glob('./content/achievements/*.md', { eager
 const teamGlob = import.meta.glob('./content/team/*.md', { eager: true, query: '?raw', import: 'default' });
 const projectsGlob = import.meta.glob('./content/projects/*.md', { eager: true, query: '?raw', import: 'default' });
 const galleryGlob = import.meta.glob('./content/gallery/*.md', { eager: true, query: '?raw', import: 'default' });
+const connectGlob = import.meta.glob('./content/connect/*.md', { eager: true, query: '?raw', import: 'default' });
 
 const IconMap: Record<string, React.ReactNode> = {
   Puzzle: <Puzzle size={32} />,
@@ -80,7 +81,11 @@ const IconMap: Record<string, React.ReactNode> = {
   Key: <Key size={40} />,
   Globe: <Globe size={40} />,
   Search: <Search size={40} />,
-  Cpu: <Cpu size={40} />
+  Cpu: <Cpu size={40} />,
+  Linkedin: <Linkedin size={32} />,
+  Instagram: <Instagram size={32} />,
+  Disc: <Disc size={32} />,
+  Github: <Github size={32} />
 };
 
 const PageWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -1160,19 +1165,16 @@ const GalleryDetailPage = ({ photos }: { photos: any[] }) => {
   );
 };
 
-const ConnectPage = () => (
+const ConnectPage = ({ links }: { links: any[] }) => (
   <PageWrapper>
     <SectionHeader title="Establish Link" subtitle="Secure communication channels indexed. Prepare for transmission." />
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-      {[
-        { label: 'LinkedIn', icon: <Linkedin size={32} />, desc: 'PROFESSIONAL INTEL' },
-        { label: 'Instagram', icon: <Instagram size={32} />, desc: 'VISUAL LOGS' },
-        { label: 'Discord', icon: <Disc size={32} />, desc: 'PRIMARY COMMS' },
-        { label: 'CTFTime', icon: <Flag size={32} />, desc: 'ARENA STATS' }
-      ].map((social, idx) => (
+      {links.map((social, idx) => (
         <motion.a 
           key={social.label}
-          href="#"
+          href={social.url || '#'}
+          target={social.url ? '_blank' : undefined}
+          rel={social.url ? 'noreferrer' : undefined}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: idx * 0.1 }}
@@ -1180,11 +1182,11 @@ const ConnectPage = () => (
           className="bg-cyber-card border border-cyber-border p-12 rounded-3xl text-center group flex flex-col items-center hover:bg-cyber-red/5 transition-all shadow-xl glass-morphism"
         >
           <div className="w-20 h-20 bg-cyber-red/5 text-cyber-red rounded-3xl flex items-center justify-center mb-8 group-hover:bg-cyber-red group-hover:text-white transition-all transform group-hover:rotate-6">
-            {social.icon}
+            {IconMap[social.icon as string] || <ExternalLink size={32} />}
           </div>
           <h4 className="text-[var(--text-main)] font-orbitron text-lg font-bold uppercase tracking-widest mb-4 group-hover:text-cyber-red transition-colors">{social.label}</h4>
           <div className="w-8 h-1 bg-cyber-red/20 mb-4 group-hover:w-16 transition-all" />
-          <p className="text-[var(--text-muted)] text-[10px] uppercase font-mono font-bold tracking-[0.2em]">{social.desc}</p>
+          <p className="text-[var(--text-muted)] text-[10px] uppercase font-mono font-bold tracking-[0.2em]">{social.description}</p>
         </motion.a>
       ))}
     </div>
@@ -1207,6 +1209,7 @@ export default function App() {
   const photos = loadCollection(galleryGlob);
   const team = loadCollection(teamGlob);
   const projects = loadCollection(projectsGlob);
+  const connectLinks = loadCollection(connectGlob);
   const heroData = matter(heroContent);
   const aboutData = matter(aboutContent);
 
@@ -1231,7 +1234,7 @@ export default function App() {
             <Route path="/projects" element={<ProjectsPage projects={projects} />} />
             <Route path="/projects/:projectId" element={<ProjectDetailPage projects={projects} />} />
             <Route path="/team" element={<TeamPage team={team} />} />
-            <Route path="/connect" element={<ConnectPage />} />
+            <Route path="/connect" element={<ConnectPage links={connectLinks} />} />
           </Routes>
         </main>
 

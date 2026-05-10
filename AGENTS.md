@@ -36,6 +36,7 @@ Content is markdown with YAML front matter. Keep field names consistent with the
 - `src/content/team/*.md`: `name`, `fullname`, `role`, `category`, `username`, `image`, optional `github`, `linkedin`
 - `src/content/projects/*.md`: `title`, `subtitle`, `description`, `heroImage`, `category`, `date`, `status`, `tags`
 - `src/content/gallery/*.md`: `event`, `date`, `description`, `images` as a YAML list or comma-separated string
+- `src/content/connect/*.md`: `label`, `description`, `icon`, `url`
 
 Local image fields can use full URLs, paths under `src/content`, plain filenames in `attachments`, or Obsidian embeds such as `![[attachments/example.png]]`. Markdown bodies can also use Obsidian image embeds, including aliases like `![[attachments/example.png|Alt text]]`.
 
