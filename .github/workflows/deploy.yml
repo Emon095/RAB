@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+  schedule:
+    - cron: "17 3 * * *"
   workflow_dispatch:
 
 permissions:
@@ -34,6 +36,9 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
+
+      - name: Fetch CTFtime team stats
+        run: npm run generate:team-stats
 
       - name: Build
         run: npm run build

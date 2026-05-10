@@ -291,6 +291,28 @@ const FALLBACK_TEAM_STATS = {
   activeSince: '2017'
 };
 
+const mapCtftimeStats = (stats: any) => {
+  const currentYear = new Date().getFullYear();
+  const yearStats = stats.rating?.[currentYear] || stats.rating?.[currentYear - 1] || {};
+  const countryMap: Record<string, string> = {
+    'BD': 'BANGLADESH',
+    'CO': 'COLOMBIA',
+    'US': 'UNITED STATES'
+  };
+
+  return {
+    name: stats.name || FALLBACK_TEAM_STATS.name,
+    country: stats.country || FALLBACK_TEAM_STATS.country,
+    countryName: countryMap[stats.country] || stats.country || FALLBACK_TEAM_STATS.countryName,
+    globalRank: yearStats.rating_place || 'N/A',
+    countryRank: yearStats.country_place || 'N/A',
+    rating: yearStats.rating_points ? `${yearStats.rating_points.toFixed(2)} pts` : 'N/A',
+    activeSince: Object.keys(stats.rating || {})
+      .filter(year => Object.keys(stats.rating[year] || {}).length > 0)
+      .sort()[0] || FALLBACK_TEAM_STATS.activeSince
+  };
+};
+
 // Page Components
 const HomePage = ({ heroData }: { heroData: any }) => {
   const [teamStats, setTeamStats] = useState<any>(null);
@@ -308,32 +330,20 @@ const HomePage = ({ heroData }: { heroData: any }) => {
 
     const fetchStats = async () => {
       try {
-        const response = await fetch(`/api/team-stats/${teamId}`);
-        if (!response.ok) throw new Error('API request failed');
-        const stats = await response.json();
-        
-        // Get current year stats
-        const currentYear = new Date().getFullYear();
-        const yearStats = stats.rating[currentYear] || stats.rating[currentYear - 1] || {};
-        
-        // Simple mapping for BD to Bangladesh (and others if needed)
-        const countryMap: Record<string, string> = {
-          'BD': 'BANGLADESH',
-          'CO': 'COLOMBIA',
-          'US': 'UNITED STATES'
-        };
+        const apiResponse = await fetch(`/api/team-stats/${teamId}`);
+        if (apiResponse.ok) {
+          const stats = await apiResponse.json();
+          setTeamStats(mapCtftimeStats(stats));
+          return;
+        }
 
-        setTeamStats({
-          name: stats.name,
-          country: stats.country,
-          countryName: countryMap[stats.country] || stats.country,
-          globalRank: yearStats.rating_place || 'N/A',
-          countryRank: yearStats.country_place || 'N/A',
-          rating: yearStats.rating_points ? `${yearStats.rating_points.toFixed(2)} pts` : 'N/A',
-          activeSince: Object.keys(stats.rating)
-            .filter(year => Object.keys(stats.rating[year] || {}).length > 0)
-            .sort()[0] || FALLBACK_TEAM_STATS.activeSince
-        });
+        const staticResponse = await fetch('/team-stats.json');
+        if (staticResponse.ok) {
+          setTeamStats(await staticResponse.json());
+          return;
+        }
+
+        setTeamStats(FALLBACK_TEAM_STATS);
       } catch (error) {
         setTeamStats(FALLBACK_TEAM_STATS);
       } finally {

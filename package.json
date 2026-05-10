@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
+    "generate:team-stats": "node scripts/fetch-team-stats.mjs",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
