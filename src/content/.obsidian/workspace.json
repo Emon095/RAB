@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "projects/002-secure-information-hiding-system.md",
+                "file": "team/002-Shahed Shahrier.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "002-secure-information-hiding-system"
+              "title": "002-Shahed Shahrier"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "projects/002-secure-information-hiding-system.md",
+                "file": "team/002-Shahed Shahrier.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for 002-secure-information-hiding-system"
+              "title": "Backlinks for 002-Shahed Shahrier"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "projects/002-secure-information-hiding-system.md",
+                "file": "team/002-Shahed Shahrier.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from 002-secure-information-hiding-system"
+              "title": "Outgoing links from 002-Shahed Shahrier"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "projects/002-secure-information-hiding-system.md",
+                "file": "team/002-Shahed Shahrier.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of 002-secure-information-hiding-system"
+              "title": "Outline of 002-Shahed Shahrier"
             }
           }
         ]
@@ -186,8 +186,10 @@
   },
   "active": "223cccf8a32f68be",
   "lastOpenFiles": [
-    "projects/003-sentinel.md",
+    "attachments/475124252_472841395878586_3603671101736497808_n.jpg",
+    "attachments/476385504_478602981969094_6743803581911237008_n.jpg",
     "projects/002-secure-information-hiding-system.md",
+    "projects/003-sentinel.md",
     "projects/002-kraken.md",
     "attachments/ChatGPT Image May 10, 2026, 02_50_08 PM.png",
     "projects/001-ctf-alert.md",
@@ -213,7 +215,6 @@
     "attachments/612847206_122151795020941325_2438399143197426776_n.jpg",
     "gallery/004-Televerse 1.0.md",
     "attachments/589370158_122142807872941325_2711716508941199326_n.jpg",
-    "attachments/589422920_122142807818941325_7230858972302899750_n 1.jpg",
     "gallery/003-Circuit Clash 1.0!.md",
     "gallery/001-BUP CTF.md",
     "gallery/002-DIU CyberCon.md",
@@ -222,7 +223,6 @@
     "team/014-Mehedi Hasan Foysal.md",
     "team/015-Imamul Huda.md",
     "team/013-Zarin Tabassum Apsara.md",
-    "team/012-Md. Muhid Khan.md",
     "attachments"
   ]
 }
