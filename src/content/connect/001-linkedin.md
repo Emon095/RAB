@@ -2,5 +2,5 @@
 label: LinkedIn
 description: PROFESSIONAL INTEL
 icon: Linkedin
-url: https://linkedin.com
+url: https://www.linkedin.com/company/108236606/
 ---

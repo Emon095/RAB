@@ -88,6 +88,27 @@ const IconMap: Record<string, React.ReactNode> = {
   Github: <Github size={32} />
 };
 
+const ConnectIcon = ({ icon }: { icon?: string }) => {
+  if (icon && IconMap[icon]) {
+    return IconMap[icon];
+  }
+
+  const iconUrl = resolveContentAsset(icon);
+  if (iconUrl && iconUrl !== icon) {
+    return (
+      <span
+        className="block w-8 h-8 bg-current"
+        style={{
+          WebkitMask: `url("${iconUrl}") center / contain no-repeat`,
+          mask: `url("${iconUrl}") center / contain no-repeat`,
+        }}
+      />
+    );
+  }
+
+  return <ExternalLink size={32} />;
+};
+
 const PageWrapper = ({ children }: { children: React.ReactNode }) => (
   <motion.div
     initial={{ opacity: 0, x: 20 }}
@@ -1182,7 +1203,7 @@ const ConnectPage = ({ links }: { links: any[] }) => (
           className="bg-cyber-card border border-cyber-border p-12 rounded-3xl text-center group flex flex-col items-center hover:bg-cyber-red/5 transition-all shadow-xl glass-morphism"
         >
           <div className="w-20 h-20 bg-cyber-red/5 text-cyber-red rounded-3xl flex items-center justify-center mb-8 group-hover:bg-cyber-red group-hover:text-white transition-all transform group-hover:rotate-6">
-            {IconMap[social.icon as string] || <ExternalLink size={32} />}
+            <ConnectIcon icon={social.icon} />
           </div>
           <h4 className="text-[var(--text-main)] font-orbitron text-lg font-bold uppercase tracking-widest mb-4 group-hover:text-cyber-red transition-colors">{social.label}</h4>
           <div className="w-8 h-1 bg-cyber-red/20 mb-4 group-hover:w-16 transition-all" />
