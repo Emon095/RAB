@@ -313,6 +313,33 @@ const MarkdownContent = ({ content }: { content: string }) => (
   </ReactMarkdown>
 );
 
+const splitMarkdownSections = (content: string) => {
+  const sections: Array<{ title: string; content: string }> = [];
+  const headingPattern = /^###\s+(.+)\s*$/gm;
+  const matches = Array.from(content.matchAll(headingPattern));
+
+  if (matches.length === 0) {
+    return [{ title: 'Project Overview', content: content.trim() }];
+  }
+
+  const intro = content.slice(0, matches[0].index).trim();
+  if (intro) {
+    sections.push({ title: 'Project Overview', content: intro });
+  }
+
+  matches.forEach((match, index) => {
+    const start = (match.index || 0) + match[0].length;
+    const end = matches[index + 1]?.index ?? content.length;
+    const sectionContent = content.slice(start, end).trim();
+
+    if (sectionContent) {
+      sections.push({ title: match[1].trim(), content: sectionContent });
+    }
+  });
+
+  return sections;
+};
+
 const splitAboutContent = (content: string) => {
   const missionHeading = content.match(/^###\s+Our Mission\s*$/mi);
   if (!missionHeading || missionHeading.index === undefined) {
@@ -906,6 +933,7 @@ const ProjectDetailPage = ({ projects }: { projects: any[] }) => {
   const project = projects.find(p => 
     p.title && encodeURIComponent(p.title.toLowerCase().replace(/\s+/g, '-')) === projectId
   );
+  const projectSections = project ? splitMarkdownSections(project.content) : [];
 
   if (!project) return <div className="text-[var(--text-main)] p-24 text-center font-orbitron">PROJECT_NOT_FOUND</div>;
 
@@ -941,12 +969,16 @@ const ProjectDetailPage = ({ projects }: { projects: any[] }) => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           <div className="lg:col-span-2 space-y-8">
-            <div className="bg-cyber-card border border-cyber-border rounded-2xl p-8 glass-morphism">
-              <h2 className="text-2xl font-orbitron font-bold text-white mb-8 border-b border-white/5 pb-4">Operational_Summary</h2>
-              <div className="prose prose-invert max-w-none prose-sm text-gray-300 leading-relaxed">
-                <MarkdownContent content={project.content} />
+            {projectSections.map((section) => (
+              <div key={section.title} className="bg-cyber-card border border-cyber-border rounded-2xl p-8 glass-morphism">
+                <h2 className="mb-8 border-b border-white/5 pb-4 font-orbitron text-2xl font-black uppercase tracking-wider text-white">
+                  {section.title}
+                </h2>
+                <div className="prose prose-invert max-w-none prose-sm text-gray-300 leading-relaxed">
+                  <MarkdownContent content={section.content} />
+                </div>
               </div>
-            </div>
+            ))}
           </div>
 
           <div className="space-y-8">

@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "connect/004-ctftime.md",
+                "file": "projects/002-secure-information-hiding-system.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "004-ctftime"
+              "title": "002-secure-information-hiding-system"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "connect/004-ctftime.md",
+                "file": "projects/002-secure-information-hiding-system.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for 004-ctftime"
+              "title": "Backlinks for 002-secure-information-hiding-system"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "connect/004-ctftime.md",
+                "file": "projects/002-secure-information-hiding-system.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from 004-ctftime"
+              "title": "Outgoing links from 002-secure-information-hiding-system"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "connect/004-ctftime.md",
+                "file": "projects/002-secure-information-hiding-system.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of 004-ctftime"
+              "title": "Outline of 002-secure-information-hiding-system"
             }
           }
         ]
@@ -186,6 +186,13 @@
   },
   "active": "223cccf8a32f68be",
   "lastOpenFiles": [
+    "projects/003-sentinel.md",
+    "projects/002-secure-information-hiding-system.md",
+    "projects/002-kraken.md",
+    "attachments/ChatGPT Image May 10, 2026, 02_50_08 PM.png",
+    "projects/001-ctf-alert.md",
+    "attachments/ChatGPT Image May 10, 2026, 02_36_14 PM.png",
+    "connect/004-ctftime.md",
     "hero.md",
     "connect/003-discord.md",
     "connect/002-Facebook.md",
@@ -193,7 +200,6 @@
     "connect/002-instagram.md",
     "connect/001-linkedin.md",
     "services/004-guidance.md",
-    "connect/004-ctftime.md",
     "connect",
     "services/003-ctf_platform.md",
     "services/002-ctf_competitions.md",
@@ -208,8 +214,6 @@
     "gallery/004-Televerse 1.0.md",
     "attachments/589370158_122142807872941325_2711716508941199326_n.jpg",
     "attachments/589422920_122142807818941325_7230858972302899750_n 1.jpg",
-    "attachments/589434555_122142807770941325_6167326664682971168_n.jpg",
-    "attachments/589612626_122142807716941325_5670878573707038934_n 1.jpg",
     "gallery/003-Circuit Clash 1.0!.md",
     "gallery/001-BUP CTF.md",
     "gallery/002-DIU CyberCon.md",
@@ -219,10 +223,6 @@
     "team/015-Imamul Huda.md",
     "team/013-Zarin Tabassum Apsara.md",
     "team/012-Md. Muhid Khan.md",
-    "team/011-Abdullah.md",
-    "team/010-null_pointer.md",
-    "team/009-Md. Rohan.md",
-    "team/008-RADOAN MOKTAKEN JAMAN.md",
     "attachments"
   ]
 }
