@@ -15,6 +15,7 @@
 :root {
   --bg-main: #050505;
   --bg-card: #0c0c0c;
+  --bg-title: var(--bg-main);
   --text-main: #e5e7eb;
   --text-muted: #9ca3af;
   --border-color: rgba(255, 255, 255, 0.05);
@@ -29,13 +30,14 @@
 }
 
 [data-theme='light'] {
-  --bg-main: #f3f1ec;
-  --bg-card: #fbfaf7;
+  --bg-main: #E7E0D3;
+  --bg-card: #F4F0E0;
+  --bg-title: #F4F0E0;
   --text-main: #111827;
   --text-muted: #4b5563;
   --border-color: rgba(17, 24, 39, 0.16);
   --crt-opacity: 0.1;
-  --scrollbar-track: #f3f1ec;
+  --scrollbar-track: #E7E0D3;
   --scrollbar-thumb: #ef4444;
 }
 

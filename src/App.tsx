@@ -153,7 +153,7 @@ const Navbar = () => {
   return (
     <nav className={cn(
       "fixed top-0 left-0 right-0 z-50 py-4 px-6 md:px-12 transition-all duration-300",
-      theme === 'glass' ? "bg-black/20 backdrop-blur-xl border-b border-white/10" : "bg-[var(--bg-main)]/90 backdrop-blur-md border-b border-cyber-red/30"
+      theme === 'glass' ? "bg-black/20 backdrop-blur-xl border-b border-white/10" : "bg-[var(--bg-title)]/90 backdrop-blur-md border-b border-cyber-red/30"
     )}>
       <div className="w-full flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
@@ -204,7 +204,7 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-[var(--bg-main)]/95 backdrop-blur-lg border-t border-cyber-red/20 overflow-hidden"
+            className="md:hidden bg-[var(--bg-title)]/95 backdrop-blur-lg border-t border-cyber-red/20 overflow-hidden"
           >
             <div className="flex flex-col p-6 space-y-4">
               {navItems.map((item) => (
