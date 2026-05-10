@@ -2,6 +2,27 @@ import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { useTheme } from "../context/ThemeContext.tsx";
 
+const binaryColumns = [
+  "010011010101101001010010110101001011010101001",
+  "101101001010011011010100101101001010010110101",
+  "001011010010101101010010110100101101010010110",
+  "110100101101001010110101001011010010101101001",
+  "011010010110101001011010010101101001011010100",
+  "100101101010010110100101011010010110101001011",
+  "010110101001011010010101101001011010100101101",
+  "101001011010010110101001011010010101101001011",
+  "001101010010110100101011010100101101001010110",
+  "110101001011010010101101001011010100101101001",
+  "010010110101001011010010101101001011010100101",
+  "101101001011010100101101001010110100101011010",
+  "011010100101101001011010010101101001011010010",
+  "100101101001010110100101101010010110100101011",
+  "001011010100101101001011010100101101001010110",
+  "110100101011010010110101001011010010101101001",
+  "010110100101101010010110100101011010010110101",
+  "101001011010010101101001011010100101101001011"
+];
+
 export const GlitchText = ({ text, className }: { text: string; className?: string }) => {
   const { theme } = useTheme();
   const isLight = theme === 'light';
@@ -171,6 +192,98 @@ export const DigitalMapBackground = () => {
           </g>
         ))}
       </svg>
+    </div>
+  );
+};
+
+export const BinarySkullBackground = () => {
+  const { theme } = useTheme();
+
+  if (theme !== 'dark') return null;
+
+  return (
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden opacity-60">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_45%)]" />
+
+      <div className="absolute inset-0 flex justify-between px-2 sm:px-6 mix-blend-screen">
+        {binaryColumns.map((column, index) => (
+          <motion.div
+            key={`${column}-${index}`}
+            className="font-mono text-[10px] sm:text-xs leading-4 sm:leading-5 text-white/45 whitespace-pre-wrap [writing-mode:vertical-rl] drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]"
+            initial={{ y: index % 2 === 0 ? "-45%" : "-10%" }}
+            animate={{ y: index % 2 === 0 ? ["-45%", "55%"] : ["-10%", "90%"] }}
+            transition={{
+              duration: 18 + (index % 6) * 3,
+              repeat: Infinity,
+              ease: "linear",
+              delay: -(index * 1.7)
+            }}
+          >
+            {`${column}${column}${column}`}
+          </motion.div>
+        ))}
+      </div>
+
+      <motion.div
+        className="absolute inset-0 flex items-center justify-center"
+        animate={{ opacity: [0.38, 0.62, 0.38], scale: [0.98, 1.01, 0.98] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <svg
+          viewBox="0 0 420 520"
+          className="w-[72vw] max-w-[720px] min-w-[320px] text-white drop-shadow-[0_0_28px_rgba(255,255,255,0.85)]"
+          aria-hidden="true"
+        >
+          <defs>
+            <linearGradient id="binary-skull-fade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="currentColor" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="currentColor" stopOpacity="0.18" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M210 42C122 42 62 104 62 190c0 53 20 91 54 119 13 11 20 27 20 44v53c0 17 14 31 31 31h18v-54h20v54h12v-54h20v54h18c17 0 31-14 31-31v-53c0-17 8-33 21-44 34-28 53-66 53-119 0-86-61-148-150-148Z"
+            fill="none"
+            stroke="url(#binary-skull-fade)"
+            strokeWidth="7"
+          />
+          <path
+            d="M137 197c0-25 18-45 43-45 23 0 39 18 39 42 0 27-20 47-46 47-22 0-36-17-36-44Zm102-3c0-24 16-42 39-42 25 0 43 20 43 45 0 27-14 44-36 44-26 0-46-20-46-47Z"
+            fill="none"
+            stroke="currentColor"
+            strokeOpacity="0.75"
+            strokeWidth="6"
+          />
+          <path
+            d="M210 244l-23 50h46l-23-50ZM146 326h128M151 361h118"
+            fill="none"
+            stroke="currentColor"
+            strokeOpacity="0.6"
+            strokeWidth="6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          {[
+            { x: 120, y: 112, text: "010101" },
+            { x: 210, y: 101, text: "110011" },
+            { x: 287, y: 128, text: "001101" },
+            { x: 106, y: 288, text: "101010" },
+            { x: 211, y: 332, text: "011010" },
+            { x: 291, y: 290, text: "110101" }
+          ].map((item) => (
+            <text
+              key={`${item.x}-${item.y}`}
+              x={item.x}
+              y={item.y}
+              textAnchor="middle"
+              className="fill-white/70 font-mono text-[18px] tracking-widest"
+            >
+              {item.text}
+            </text>
+          ))}
+        </svg>
+      </motion.div>
+
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.18),transparent_35%,rgba(5,5,5,0.35))]" />
     </div>
   );
 };

@@ -53,7 +53,7 @@ import ReactMarkdown from 'react-markdown';
 import { cn } from './lib/utils';
 import { parseContentImageList, renderObsidianEmbeds, resolveContentAsset } from './lib/contentAssets';
 import { useTheme } from './context/ThemeContext.tsx';
-import { GlitchText, CircuitLines, GlitchOverlay, DigitalMapBackground } from './components/CyberEffects';
+import { GlitchText, CircuitLines, GlitchOverlay, DigitalMapBackground, BinarySkullBackground } from './components/CyberEffects';
 
 // Import markdown content as raw strings
 import heroContent from './content/hero.md?raw';
@@ -1253,6 +1253,7 @@ export default function App() {
       <div className="min-h-screen bg-cyber-dark font-sans selection:bg-cyber-red selection:text-white relative crt">
         <div className="scanline" />
         <GlitchOverlay />
+        <BinarySkullBackground />
         <DigitalMapBackground />
         <CircuitLines />
         <Navbar />
