@@ -12,7 +12,7 @@ const fallback = {
   globalRank: 42,
   countryRank: 2,
   rating: '365.87 pts',
-  activeSince: '2017',
+  activeSince: '2024',
   source: 'fallback',
   updatedAt: new Date().toISOString(),
 };

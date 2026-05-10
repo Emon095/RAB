@@ -198,20 +198,20 @@ const Navbar = () => {
         <div className="absolute right-6 top-[24px] hidden h-4 w-44 rounded-full bg-gradient-to-b from-white/70 via-white/30 to-transparent shadow-inner lg:block" />
 
         <Link to="/" className="absolute left-24 top-0 z-20 hidden h-[94px] w-[148px] transition-transform hover:-translate-y-0.5 md:block">
-          <div className="absolute left-1/2 top-0 h-14 w-40 -translate-x-1/2 -skew-x-[14deg] border border-cyber-border bg-[var(--bg-card)] shadow-[0_8px_22px_rgba(0,0,0,0.32)]" />
+          <div className="absolute left-1/2 top-0 h-14 w-40 -translate-x-1/2 -skew-x-[14deg] border border-[#F20D00] bg-[#F20D00] shadow-[0_8px_22px_rgba(0,0,0,0.32)]" />
           <div className="absolute left-1/2 top-1 h-4 w-36 -translate-x-1/2 -skew-x-[14deg] bg-gradient-to-b from-white/55 to-transparent opacity-70" />
           <div
-            className="absolute left-1/2 top-6 h-[72px] w-[104px] -translate-x-1/2 border border-cyber-border bg-[var(--bg-card)] shadow-[0_12px_24px_rgba(0,0,0,0.35)]"
+            className="absolute left-1/2 top-6 h-[72px] w-[104px] -translate-x-1/2 border border-[#F20D00] bg-[#F20D00] shadow-[0_12px_24px_rgba(0,0,0,0.35)]"
             style={{ clipPath: "polygon(50% 100%, 0 0, 100% 0)" }}
           />
-          <div className="absolute left-1/2 top-[18px] flex -translate-x-1/2 flex-col items-center text-center leading-none">
-            <span className="font-orbitron text-2xl font-black tracking-tight text-[var(--text-main)]">RAB</span>
-            <span className="mt-1 text-[7px] font-black uppercase tracking-[0.14em] text-cyber-red">Cyber Team</span>
+          <div className="absolute left-1/2 top-[6px] flex w-40 -translate-x-1/2 flex-col items-center justify-center text-center leading-none">
+            <span className="font-orbitron text-[42px] font-black leading-[0.86] tracking-normal text-white">RAB</span>
+            <span className="mt-1 text-[6px] font-black uppercase leading-none tracking-[0.12em] text-white">Cyber Team</span>
           </div>
         </Link>
 
-        <Link to="/" className="absolute left-4 top-4 z-20 flex h-11 items-center rounded-full border border-cyber-border bg-[var(--bg-card)] px-5 shadow-[0_8px_18px_rgba(0,0,0,0.22)] md:hidden">
-          <span className="font-orbitron text-lg font-black text-[var(--text-main)]">RAB</span>
+        <Link to="/" className="absolute left-4 top-4 z-20 flex h-11 items-center rounded-full border border-[#F20D00] bg-[#F20D00] px-5 shadow-[0_8px_18px_rgba(0,0,0,0.22)] md:hidden">
+          <span className="font-orbitron text-lg font-black text-white">RAB</span>
         </Link>
         
         <div className="absolute inset-x-0 top-4 z-10 flex h-11 items-center justify-end pl-[280px] pr-5">
@@ -235,7 +235,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center">
             <motion.button 
               onClick={() => window.location.href = 'mailto:smshahrieremon@gmail.com'}
-              className="ml-3 rounded-full border border-cyber-red/40 bg-[var(--bg-card)]/50 px-4 py-1.5 text-[10px] font-orbitron uppercase tracking-widest text-cyber-red shadow-inner transition-all hover:bg-cyber-red hover:text-white"
+              className="ml-3 rounded-full border border-[#F20D00] bg-[#F20D00] px-4 py-1.5 text-[10px] font-orbitron uppercase tracking-widest text-white shadow-inner transition-all hover:brightness-110"
               whileHover={{ boxShadow: "0 0 15px rgba(239, 68, 68, 0.4)" }}
             >
               Contact Us
@@ -343,7 +343,7 @@ const FALLBACK_TEAM_STATS = {
   globalRank: 42,
   countryRank: 2,
   rating: '365.87 pts',
-  activeSince: '2017'
+  activeSince: '2024'
 };
 
 const mapCtftimeStats = (stats: any) => {
