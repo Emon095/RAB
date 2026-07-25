@@ -1036,12 +1036,50 @@ const SUPABASE_REVIEWS_ENDPOINT = SUPABASE_URL ? `${SUPABASE_URL}/rest/v1/rab_re
 const SUPABASE_DOWNLOADS_ENDPOINT = SUPABASE_URL ? `${SUPABASE_URL}/rest/v1/rab_downloads` : '';
 const supabaseHeaders = { apikey: SUPABASE_KEY || '', Authorization: `Bearer ${SUPABASE_KEY || ''}`, 'Content-Type': 'application/json' };
 
-const Rating = ({ value }: { value: number }) => (
-  <span className="flex items-center gap-1 text-sm font-mono text-[var(--text-main)]">
-    <Star size={16} className="fill-amber-400 text-amber-400" />
-    {Number(value || 0).toFixed(1)}
-  </span>
-);
+const StoreLiveStats = ({ app }: { app: any }) => {
+  const slug = appSlug(app.name);
+  const [rating, setRating] = useState(0);
+  const [reviewCount, setReviewCount] = useState(0);
+  const [downloads, setDownloads] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadStats = async () => {
+      try {
+        if (!SUPABASE_REVIEWS_ENDPOINT || !SUPABASE_KEY) return;
+        const [reviewsResponse, downloadsResponse] = await Promise.all([
+          fetch(`${SUPABASE_REVIEWS_ENDPOINT}?app_slug=eq.${slug}&select=rating`, { headers: supabaseHeaders }),
+          fetch(`${SUPABASE_DOWNLOADS_ENDPOINT}?app_slug=eq.${slug}&select=id`, { headers: { ...supabaseHeaders, Prefer: 'count=exact' } }),
+        ]);
+        if (reviewsResponse.ok) {
+          const reviewRows = await reviewsResponse.json();
+          if (!cancelled) {
+            setReviewCount(reviewRows.length);
+            setRating(reviewRows.length ? reviewRows.reduce((sum: number, review: any) => sum + Number(review.rating), 0) / reviewRows.length : 0);
+          }
+        }
+        const range = downloadsResponse.headers.get('content-range');
+        if (!cancelled && range) setDownloads(Number(range.split('/')[1]) || 0);
+      } catch { /* keep the last visible values */ }
+    };
+    loadStats();
+    const timer = window.setInterval(loadStats, 5000);
+    return () => { cancelled = true; window.clearInterval(timer); };
+  }, [slug]);
+
+  return (
+    <>
+      <span className="flex items-center gap-1 text-sm font-mono text-[var(--text-main)]">
+        <Star size={16} className="fill-amber-400 text-amber-400" />
+        {rating.toFixed(1)}
+        <span className="ml-1 text-[10px] text-[var(--text-muted)]">({reviewCount} reviews)</span>
+      </span>
+      <span className="flex items-center gap-1.5 text-xs font-mono text-[var(--text-muted)]">
+        <Download size={15} /> {downloads} downloads
+      </span>
+    </>
+  );
+};
 
 const StorePage = ({ apps }: { apps: any[] }) => (
   <PageWrapper>
@@ -1071,10 +1109,7 @@ const StorePage = ({ apps }: { apps: any[] }) => (
                 {app.name}
               </Link>
               <div className="mt-3 flex flex-wrap items-center gap-4">
-                <Rating value={Number(app.rating)} />
-                <span className="flex items-center gap-1.5 text-xs font-mono text-[var(--text-muted)]">
-                  <Download size={15} /> {app.downloads || 0} downloads
-                </span>
+                <StoreLiveStats app={app} />
                 <span className="text-xs font-mono text-cyber-red">{app.version}</span>
               </div>
               <p className="mt-3 max-w-3xl text-sm leading-relaxed text-[var(--text-muted)]">{app.shortDescription}</p>
