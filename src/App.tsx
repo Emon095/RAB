@@ -46,7 +46,12 @@ import {
   ClipboardCheck,
   GraduationCap,
   Lock,
-  ArrowRight
+  ArrowRight,
+  Download,
+  Star,
+  Smartphone,
+  BadgeCheck,
+  CalendarDays
 } from 'lucide-react';
 import matter from 'gray-matter';
 import ReactMarkdown from 'react-markdown';
@@ -72,6 +77,7 @@ const teamGlob = import.meta.glob('./content/team/*.md', { eager: true, query: '
 const projectsGlob = import.meta.glob('./content/projects/*.md', { eager: true, query: '?raw', import: 'default' });
 const galleryGlob = import.meta.glob('./content/gallery/*.md', { eager: true, query: '?raw', import: 'default' });
 const connectGlob = import.meta.glob('./content/connect/*.md', { eager: true, query: '?raw', import: 'default' });
+const appsGlob = import.meta.glob('./content/apps/*.md', { eager: true, query: '?raw', import: 'default' });
 
 const FacebookIcon = ({ size = 32 }: { size?: number }) => (
   <svg
@@ -185,6 +191,7 @@ const Navbar = () => {
     { name: 'Gallery', path: '/gallery' },
     { name: 'Services', path: '/services' },
     { name: 'Projects', path: '/projects' },
+    { name: 'RAB Store', path: '/store' },
     { name: 'Team', path: '/team' },
     { name: 'Connect', path: '/connect' },
   ];
@@ -1018,6 +1025,302 @@ const ProjectDetailPage = ({ projects }: { projects: any[] }) => {
   );
 };
 
+const appSlug = (name = '') => encodeURIComponent(name.toLowerCase().trim().replace(/\s+/g, '-'));
+const appTags = (tags?: string[] | string) => Array.isArray(tags)
+  ? tags
+  : String(tags || '').split(',').map(tag => tag.trim()).filter(Boolean);
+
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || import.meta.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+const SUPABASE_REVIEWS_ENDPOINT = SUPABASE_URL ? `${SUPABASE_URL}/rest/v1/rab_reviews` : '';
+const SUPABASE_DOWNLOADS_ENDPOINT = SUPABASE_URL ? `${SUPABASE_URL}/rest/v1/rab_downloads` : '';
+const supabaseHeaders = { apikey: SUPABASE_KEY || '', Authorization: `Bearer ${SUPABASE_KEY || ''}`, 'Content-Type': 'application/json' };
+
+const Rating = ({ value }: { value: number }) => (
+  <span className="flex items-center gap-1 text-sm font-mono text-[var(--text-main)]">
+    <Star size={16} className="fill-amber-400 text-amber-400" />
+    {Number(value || 0).toFixed(1)}
+  </span>
+);
+
+const StorePage = ({ apps }: { apps: any[] }) => (
+  <PageWrapper>
+    <SectionHeader
+      title="RAB Store"
+      subtitle="Tools forged by RAB. Download our latest Android applications directly from the source."
+    />
+
+    <div className="space-y-8">
+      {apps.map((app, idx) => (
+        <motion.article
+          key={`${app.name}-${idx}`}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: idx * 0.08 }}
+          className="group relative"
+        >
+          <div className="absolute inset-0 -translate-x-2 translate-y-2 -skew-x-1 border border-cyber-border opacity-60" />
+          <div className="relative grid gap-6 overflow-hidden border border-cyber-border bg-cyber-card p-5 shadow-2xl glass-morphism md:grid-cols-[120px_1fr_240px] md:items-center md:p-8">
+            <img
+              src={resolveContentAsset(app.icon)}
+              alt={`${app.name} icon`}
+              className="h-28 w-28 rounded-3xl border border-white/10 bg-black/20 object-cover shadow-xl"
+            />
+            <div>
+              <Link to={`/store/${appSlug(app.name)}`} className="font-orbitron text-2xl font-black text-[var(--text-main)] transition-colors hover:text-cyber-red">
+                {app.name}
+              </Link>
+              <div className="mt-3 flex flex-wrap items-center gap-4">
+                <Rating value={Number(app.rating)} />
+                <span className="flex items-center gap-1.5 text-xs font-mono text-[var(--text-muted)]">
+                  <Download size={15} /> {app.downloads || 0} downloads
+                </span>
+                <span className="text-xs font-mono text-cyber-red">{app.version}</span>
+              </div>
+              <p className="mt-3 max-w-3xl text-sm leading-relaxed text-[var(--text-muted)]">{app.shortDescription}</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {appTags(app.tags).map(tag => (
+                  <span key={tag} className="rounded border border-white/10 bg-white/5 px-2 py-1 text-[9px] font-mono uppercase tracking-widest text-[var(--text-muted)]">#{tag}</span>
+                ))}
+              </div>
+            </div>
+            <Link
+              to={`/store/${appSlug(app.name)}`}
+              className="flex min-h-16 items-center justify-center gap-3 bg-cyber-red px-6 font-orbitron text-xs font-black uppercase tracking-[0.2em] text-white shadow-[0_0_22px_rgba(239,68,68,0.2)] transition-all hover:bg-red-600 hover:shadow-[0_0_30px_rgba(239,68,68,0.4)]"
+            >
+              <Download size={19} /> Download
+            </Link>
+          </div>
+        </motion.article>
+      ))}
+    </div>
+
+    {apps.length === 0 && (
+      <div className="border border-dashed border-cyber-border p-16 text-center font-mono text-[var(--text-muted)]">
+        NO_APPS_UPLOADED
+      </div>
+    )}
+  </PageWrapper>
+);
+
+const StoreDetailPage = ({ apps }: { apps: any[] }) => {
+  const { appId } = useParams();
+  const navigate = useNavigate();
+  const app = apps.find(item => appSlug(item.name) === appId);
+  const reviewStorageKey = `rab-store-reviews-${appId}`;
+  const [reviews, setReviews] = useState<Array<{ name: string; rating: number; text: string; date: string }>>([]);
+  const [reviewText, setReviewText] = useState('');
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewStatus, setReviewStatus] = useState('');
+  const [downloadCount, setDownloadCount] = useState(Number(app?.downloads) || 0);
+
+  const loadRemoteStats = async () => {
+    if (!SUPABASE_REVIEWS_ENDPOINT || !SUPABASE_KEY || !appId) return;
+    try {
+      const [reviewsResponse, downloadsResponse] = await Promise.all([
+        fetch(`${SUPABASE_REVIEWS_ENDPOINT}?app_slug=eq.${encodeURIComponent(appId)}&select=name,rating,text,created_at&order=created_at.desc`, { headers: supabaseHeaders }),
+        fetch(`${SUPABASE_DOWNLOADS_ENDPOINT}?app_slug=eq.${encodeURIComponent(appId)}&select=id`, { headers: { ...supabaseHeaders, Prefer: 'count=exact' } }),
+      ]);
+      if (reviewsResponse.ok) {
+        const remoteReviews = await reviewsResponse.json();
+        setReviews(remoteReviews.map((review: any) => ({ ...review, date: new Date(review.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) })));
+      }
+      const contentRange = downloadsResponse.headers.get('content-range');
+      if (contentRange) setDownloadCount(Number(contentRange.split('/')[1]) || 0);
+    } catch { /* local fallback remains visible */ }
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadReviews = async () => {
+      try {
+        if (!SUPABASE_REVIEWS_ENDPOINT || !SUPABASE_KEY) throw new Error('not configured');
+        const response = await fetch(`${SUPABASE_REVIEWS_ENDPOINT}?app_slug=eq.${encodeURIComponent(appId || '')}&select=name,rating,text,created_at&order=created_at.desc`, { headers: supabaseHeaders });
+        if (!response.ok) throw new Error('request failed');
+        const remoteReviews = await response.json();
+        if (!cancelled) setReviews(remoteReviews.map((review: any) => ({ ...review, date: new Date(review.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) })));
+      } catch {
+        const saved = window.localStorage.getItem(reviewStorageKey);
+        if (!cancelled && saved) setReviews(JSON.parse(saved));
+      }
+    };
+    loadReviews();
+    loadRemoteStats();
+    const statsTimer = window.setInterval(loadRemoteStats, 5000);
+    return () => { cancelled = true; window.clearInterval(statsTimer); };
+  }, [reviewStorageKey]);
+
+  const submitReview = async () => {
+    const text = reviewText.trim();
+    if (!text) return;
+    const nextReview = {
+      name: `user${String(reviews.length + 1).padStart(2, '0')}`,
+      rating: reviewRating,
+      text,
+      date: new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }),
+    };
+    try {
+      if (!SUPABASE_REVIEWS_ENDPOINT || !SUPABASE_KEY) throw new Error('not configured');
+      const response = await fetch(SUPABASE_REVIEWS_ENDPOINT, { method: 'POST', headers: { ...supabaseHeaders, Prefer: 'return=representation' }, body: JSON.stringify({ app_slug: appId, name: nextReview.name, rating: nextReview.rating, text: nextReview.text }) });
+      if (!response.ok) throw new Error('insert failed');
+      setReviews(current => [nextReview, ...current]);
+      setReviewStatus('Review published for everyone.');
+    } catch {
+      const nextReviews = [nextReview, ...reviews];
+      setReviews(nextReviews);
+      window.localStorage.setItem(reviewStorageKey, JSON.stringify(nextReviews));
+      setReviewStatus('Saved on this device. Run the Supabase SQL setup first.');
+    }
+    setReviewText('');
+    setReviewRating(5);
+  };
+
+  const recordDownload = async (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    const apkHref = event.currentTarget.href;
+    const apkFileName = app.apkFileName || 'app.apk';
+    setDownloadCount(current => current + 1);
+    try {
+      if (SUPABASE_DOWNLOADS_ENDPOINT && SUPABASE_KEY && appId) {
+        const request = fetch(SUPABASE_DOWNLOADS_ENDPOINT, {
+          method: 'POST',
+          headers: { ...supabaseHeaders, Prefer: 'return=minimal' },
+          body: JSON.stringify({ app_slug: appId }),
+          keepalive: true,
+        });
+        const response = await Promise.race([
+          request,
+          new Promise<Response>((_, reject) => window.setTimeout(() => reject(new Error('download count timeout')), 3000)),
+        ]);
+        if (!response.ok) throw new Error('download count insert failed');
+      }
+    } catch { /* download still proceeds */ }
+    const downloadLink = document.createElement('a');
+    downloadLink.href = apkHref;
+    downloadLink.download = apkFileName;
+    downloadLink.style.display = 'none';
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    downloadLink.remove();
+  };
+
+  if (!app) return <div className="p-24 text-center font-orbitron text-[var(--text-main)]">APP_NOT_FOUND</div>;
+
+  const screenshots = parseContentImageList(app.screenshots);
+
+  return (
+    <PageWrapper>
+      <button onClick={() => navigate('/store')} className="mb-8 flex items-center gap-2 text-[10px] font-orbitron tracking-widest text-[var(--text-muted)] transition-colors hover:text-cyber-red">
+        <ArrowLeft size={14} /> BACK_TO_RAB_STORE
+      </button>
+
+      <section className="relative overflow-hidden border border-cyber-border bg-cyber-card p-6 glass-morphism md:p-10">
+        <div className="absolute right-0 top-0 h-40 w-40 bg-cyber-red/10 blur-3xl" />
+        <div className="relative flex flex-col gap-7 md:flex-row md:items-center">
+          <img src={resolveContentAsset(app.icon)} alt={`${app.name} icon`} className="h-36 w-36 rounded-[2rem] border border-white/10 bg-black/20 object-cover shadow-2xl md:h-44 md:w-44" />
+          <div className="flex-1">
+            <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.25em] text-cyber-red">Android / Apps / RAB Store</p>
+            <h1 className="font-orbitron text-4xl font-black uppercase tracking-tight text-[var(--text-main)] md:text-6xl">{app.name}</h1>
+            <p className="mt-3 font-mono text-sm text-[var(--text-muted)]">Version {app.version} · by {app.developer || 'RAB Cyber Team'}</p>
+          </div>
+        </div>
+
+        <div className="relative mt-10 grid grid-cols-2 divide-x divide-cyber-border border-y border-cyber-border py-6 md:grid-cols-4">
+          <div className="flex flex-col items-center gap-2 px-3"><Star className="text-cyber-red" /><strong className="text-xl text-[var(--text-main)]">{reviews.length ? (reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length).toFixed(1) : '0.0'}</strong><span className="text-xs text-[var(--text-muted)]">{reviews.length} reviews</span></div>
+          <div className="flex flex-col items-center gap-2 px-3"><Download className="text-cyber-red" /><strong className="text-xl text-[var(--text-main)]">{downloadCount}</strong><span className="text-xs text-[var(--text-muted)]">downloads</span></div>
+          <div className="mt-6 flex flex-col items-center gap-2 border-l-0 px-3 md:mt-0"><ShieldCheck className="text-cyber-red" /><strong className="text-xl text-[var(--text-main)]">Verified</strong><span className="text-xs text-[var(--text-muted)]">RAB security</span></div>
+          <div className="mt-6 flex flex-col items-center gap-2 px-3 md:mt-0"><Smartphone className="text-cyber-red" /><strong className="text-xl text-[var(--text-main)]">{app.android || 'Android'}</strong><span className="text-xs text-[var(--text-muted)]">{app.size || 'APK'}</span></div>
+        </div>
+
+        <div className="relative mt-10 grid gap-8 lg:grid-cols-[1fr_360px]">
+          <div>
+            <h2 className="font-orbitron text-xl font-black uppercase text-[var(--text-main)]">{app.shortDescription}</h2>
+            <div className="prose prose-invert mt-6 max-w-none text-[var(--text-muted)]">
+              <MarkdownContent content={app.content} />
+            </div>
+          </div>
+          <div className="border border-cyber-red/30 bg-cyber-red/5 p-6">
+            <h3 className="font-orbitron text-lg font-black uppercase text-[var(--text-main)]">Latest release</h3>
+            <div className="mt-5 space-y-3 font-mono text-xs text-[var(--text-muted)]">
+              <p className="flex items-center gap-2"><BadgeCheck size={15} className="text-cyber-red" /> Version {app.version}</p>
+              <p className="flex items-center gap-2"><CalendarDays size={15} className="text-cyber-red" /> {app.updated}</p>
+              <p className="flex items-center gap-2"><Smartphone size={15} className="text-cyber-red" /> {app.size || 'APK package'}</p>
+            </div>
+            <a
+              href={app.apkUrl}
+              onClick={recordDownload}
+              download={app.apkFileName || true}
+              className="mt-7 flex w-full items-center justify-center gap-3 bg-cyber-red px-5 py-5 font-orbitron text-xs font-black uppercase tracking-[0.18em] text-white transition-all hover:bg-red-600"
+            >
+              <Download size={20} /> Download APK
+            </a>
+            <p className="mt-4 text-center font-mono text-[9px] uppercase tracking-wider text-[var(--text-muted)]">Direct secure APK download</p>
+          </div>
+        </div>
+      </section>
+
+      {screenshots.length > 0 && (
+        <section className="mt-12">
+          <h2 className="mb-6 font-orbitron text-xl font-black uppercase tracking-widest text-[var(--text-main)]">App Screenshots</h2>
+          <div className="store-screenshot-strip flex gap-5 overflow-x-auto border-y border-cyber-border py-6">
+            {screenshots.map((screenshot, index) => (
+              <img key={screenshot} src={screenshot} alt={`${app.name} screenshot ${index + 1}`} className="h-[480px] w-auto shrink-0 rounded-2xl border border-cyber-border bg-black/20 object-cover" />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section className="mt-12 grid gap-8 lg:grid-cols-[360px_1fr]">
+        <div className="border border-cyber-border bg-cyber-card p-6 glass-morphism">
+          <h2 className="font-orbitron text-lg font-black uppercase tracking-widest text-[var(--text-main)]">Write a review</h2>
+          <p className="mt-2 text-xs leading-relaxed text-[var(--text-muted)]">Your name is shown anonymously as user01, user02, and so on.</p>
+          <div className="mt-6 flex gap-1" aria-label="Choose a rating">
+            {[1, 2, 3, 4, 5].map(star => (
+              <button key={star} type="button" onClick={() => setReviewRating(star)} aria-label={`${star} stars`} className="transition-transform hover:scale-110">
+                <Star size={25} className={star <= reviewRating ? 'fill-amber-400 text-amber-400' : 'text-[var(--text-muted)]'} />
+              </button>
+            ))}
+          </div>
+          <textarea
+            value={reviewText}
+            onChange={event => setReviewText(event.target.value)}
+            placeholder="What did you think about Event Bazar?"
+            rows={5}
+            maxLength={500}
+            className="mt-5 w-full resize-none border border-cyber-border bg-black/20 p-4 text-sm text-[var(--text-main)] outline-none placeholder:text-[var(--text-muted)] focus:border-cyber-red"
+          />
+          <button type="button" onClick={submitReview} disabled={!reviewText.trim()} className="mt-4 w-full bg-cyber-red px-5 py-4 font-orbitron text-xs font-black uppercase tracking-widest text-white transition-all hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-40">
+            Publish review
+          </button>
+          {reviewStatus && <p className="mt-3 text-center font-mono text-[10px] text-cyber-red">{reviewStatus}</p>}
+        </div>
+
+        <div className="border border-cyber-border bg-cyber-card p-6 glass-morphism">
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="font-orbitron text-lg font-black uppercase tracking-widest text-[var(--text-main)]">Community reviews</h2>
+            <span className="font-mono text-xs text-[var(--text-muted)]">{reviews.length} review{reviews.length === 1 ? '' : 's'}</span>
+          </div>
+          <div className="mt-6 space-y-4">
+            {reviews.length === 0 && <p className="border border-dashed border-cyber-border p-8 text-center font-mono text-xs text-[var(--text-muted)]">NO_REVIEWS_YET — BE THE FIRST</p>}
+            {reviews.map((review, index) => (
+              <article key={`${review.name}-${review.date}-${index}`} className="border border-cyber-border bg-black/10 p-5">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <span className="font-mono text-sm font-bold text-cyber-red">{review.name}</span>
+                  <span className="text-[10px] font-mono text-[var(--text-muted)]">{review.date}</span>
+                </div>
+                <div className="mt-2 flex gap-0.5">
+                  {[1, 2, 3, 4, 5].map(star => <Star key={star} size={14} className={star <= review.rating ? 'fill-amber-400 text-amber-400' : 'text-[var(--text-muted)]'} />)}
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)]">{review.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    </PageWrapper>
+  );
+};
+
 const TeamPage = ({ team }: { team: any[] }) => {
   const categories = ["Team Leads", "Core Member", "General Member", "R&D Member", "Advisor"];
   
@@ -1292,6 +1595,7 @@ export default function App() {
   const team = loadCollection(teamGlob);
   const projects = loadCollection(projectsGlob);
   const connectLinks = loadCollection(connectGlob);
+  const apps = loadCollection(appsGlob);
   const heroData = matter(heroContent);
   const aboutData = matter(aboutContent);
 
@@ -1315,6 +1619,8 @@ export default function App() {
             <Route path="/services" element={<ServicesPage services={services} />} />
             <Route path="/projects" element={<ProjectsPage projects={projects} />} />
             <Route path="/projects/:projectId" element={<ProjectDetailPage projects={projects} />} />
+            <Route path="/store" element={<StorePage apps={apps} />} />
+            <Route path="/store/:appId" element={<StoreDetailPage apps={apps} />} />
             <Route path="/team" element={<TeamPage team={team} />} />
             <Route path="/connect" element={<ConnectPage links={connectLinks} />} />
           </Routes>

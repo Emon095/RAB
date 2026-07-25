@@ -4,7 +4,7 @@ subtitle: Cybersecurity Event Tracking & CTF Notification Platform
 description: A mobile-first cybersecurity platform for discovering, tracking, submitting, and managing Capture the Flag competitions across international, national, and inter-university scopes.
 heroImage: "![[../attachments/ChatGPT Image May 10, 2026, 02_36_14 PM.png]]"
 category: Cybersecurity / Web Application
-date: 2026-04
+date: 2026-04-01
 status: ongoing
 tags:
   - React
