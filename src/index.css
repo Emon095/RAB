@@ -168,3 +168,8 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #b91c1c;
 }
+
+.store-screenshot-strip {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) rgba(255, 255, 255, 0.08);
+}
