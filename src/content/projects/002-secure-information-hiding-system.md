@@ -4,7 +4,7 @@ subtitle: A secure data-hiding platform using steganography and optional passwor
 description: A software engineering lab project that allows users to hide secret information inside digital media files, protect the hidden data with a password, and later extract the original information from the stego file.
 heroImage: "![[../attachments/ChatGPT Image May 10, 2026, 02_50_08 PM.png]]"
 category: Cybersecurity / Information Security / Software Engineering
-date: 2026-04
+date: 2026-04-01
 status: ongoing
 tags:
   - Steganography
