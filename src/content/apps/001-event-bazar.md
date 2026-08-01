@@ -16,10 +16,12 @@ tags:
   - CTF
   - Cybersecurity
 screenshots:
-  - attachments/event-bazar-01-home.png
-  - attachments/event-bazar-02-create.png
-  - attachments/event-bazar-03-profile.png
-  - attachments/event-bazar-04-messages.png
+  - attachments/event-bazar-01-profile.png
+  - attachments/event-bazar-02-segments.png
+  - attachments/event-bazar-03-messages.png
+  - attachments/event-bazar-04-events.png
+  - attachments/event-bazar-05-interested.png
+  - attachments/event-bazar-06-create.png
 apkUrl: /downloads/Event-Bazar-2.0.apk
 apkFileName: Event-Bazar-2.0.apk
 ---
