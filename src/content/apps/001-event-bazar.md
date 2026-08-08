@@ -2,8 +2,8 @@
 name: Event Bazar
 shortDescription: Discover, create, and share cybersecurity events with the community.
 icon: attachments/event-bazar-logo.png
-version: "2.0"
-updated: August 2, 2026
+version: "2.1"
+updated: August 8, 2026
 developer: Shahrier Emon
 rating: 5.0
 reviews: 0
@@ -22,8 +22,8 @@ screenshots:
   - attachments/event-bazar-04-events.png
   - attachments/event-bazar-05-interested.png
   - attachments/event-bazar-06-create.png
-apkUrl: /downloads/Event-Bazar-2.0.apk
-apkFileName: Event-Bazar-2.0.apk
+apkUrl: /downloads/Event-Bazar-2.1.apk
+apkFileName: Event-Bazar-2.1.apk
 ---
 
 ## About Event Bazar
@@ -41,4 +41,4 @@ Event Bazar is a community-powered Android app for discovering upcoming cybersec
 
 ## Download
 
-Download version 2.0 directly from the RAB Store.
+Download version 2.1 directly from the RAB Store.
